@@ -1,6 +1,7 @@
 import express from "express";
 import ENV from "./config/env.js";
 import { setServers } from "node:dns/promises";
+import connectDB from "./config/db.js";
 
 setServers(["1.1.1.1", "8.8.8.8"]);
 
@@ -30,7 +31,7 @@ const startServer = async () => {
       });
     }
   } catch (error) {
-    console.error("Failed to start server");
+    console.error(`Failed to start server: ${error}`);
     process.exit(1);
   }
 };
