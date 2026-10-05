@@ -2,11 +2,20 @@ import express from "express";
 import ENV from "./config/env.js";
 import { setServers } from "node:dns/promises";
 import connectDB from "./config/db.js";
+import debtorsRouter from "./routes/debtors.routes.js";
+import tabsRouter from "./routes/tabs.routes.js";
+import reportsRouter from "./routes/reports.routes.js";
 
 setServers(["1.1.1.1", "8.8.8.8"]);
 
 const app = express();
 app.use(express.json());
+
+const BASE_ROUTE = "/api/v1";
+
+app.use(`${BASE_ROUTE}/debtors`, debtorsRouter);
+app.use(`${BASE_ROUTE}/tabs`, tabsRouter);
+app.use(`${BASE_ROUTE}/reports`, reportsRouter);
 
 //api health check
 app.use("/api/v1/health", (req, res) => {
