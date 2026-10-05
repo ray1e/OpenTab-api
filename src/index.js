@@ -6,7 +6,7 @@ import connectDB from "./config/db.js";
 setServers(["1.1.1.1", "8.8.8.8"]);
 
 const app = express();
-app.use(express.json);
+app.use(express.json());
 
 //api health check
 app.use("/api/v1/health", (req, res) => {
@@ -29,6 +29,9 @@ const startServer = async () => {
           `Server is running on port ${ENV.PORT} in ${ENV.NODE_ENV} mode`
         );
       });
+    } else {
+      console.error(`Database connection failed ${error.message}`);
+      process.exit(1);
     }
   } catch (error) {
     console.error(`Failed to start server: ${error}`);
