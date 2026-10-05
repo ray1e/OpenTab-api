@@ -2,9 +2,9 @@ import express from "express";
 import ENV from "./config/env.js";
 import { setServers } from "node:dns/promises";
 import connectDB from "./config/db.js";
-import debtorsRouter from "./routes/debtors.routes.js";
-import tabsRouter from "./routes/tabs.routes.js";
-import reportsRouter from "./routes/reports.routes.js";
+import debtorsRouter from "./routes/debtors.route.js";
+import tabsRouter from "./routes/tabs.route.js";
+import reportsRouter from "./routes/reports.route.js";
 import { errorHandler, notFound } from "./middlewares/error.middleware.js";
 
 setServers(["1.1.1.1", "8.8.8.8"]);
