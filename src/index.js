@@ -5,6 +5,7 @@ import connectDB from "./config/db.js";
 import debtorsRouter from "./routes/debtors.routes.js";
 import tabsRouter from "./routes/tabs.routes.js";
 import reportsRouter from "./routes/reports.routes.js";
+import { errorHandler, notFound } from "./middlewares/error.middleware.js";
 
 setServers(["1.1.1.1", "8.8.8.8"]);
 
@@ -27,6 +28,9 @@ app.use("/api/v1/health", (req, res) => {
     status: "OK",
   });
 });
+
+app.use(notFound);
+app.use(errorHandler);
 
 const startServer = async () => {
   try {
