@@ -6,12 +6,13 @@ import debtorsRouter from "./routes/debtors.route.js";
 import tabsRouter from "./routes/tabs.route.js";
 import reportsRouter from "./routes/reports.route.js";
 import { errorHandler, notFound } from "./middlewares/error.middleware.js";
+import morgan from "morgan";
 
 setServers(["1.1.1.1", "8.8.8.8"]);
 
 const app = express();
 app.use(express.json());
-
+app.use(morgan("dev"))
 const BASE_ROUTE = "/api/v1";
 
 app.use(`${BASE_ROUTE}/debtors`, debtorsRouter);
