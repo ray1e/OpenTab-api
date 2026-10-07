@@ -1,8 +1,6 @@
-import { z } from "zod";
-
 // usage example; app.get("/debtorId", validate({params: debtor}), getDebtors)
 export const validate = (schemas) => {
-  (req, res, next) => {
+  return (req, res, next) => {
     for (const [key, schema] of Object.entries(schemas)) {
       const result = schema.safeParse(req[key]);
       if (!result.success) {
