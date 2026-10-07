@@ -1,3 +1,4 @@
+import { Timestamp } from "mongodb";
 import { Schema, model } from "mongoose";
 
 const tabSchema = new Schema({
@@ -18,7 +19,7 @@ const tabSchema = new Schema({
       itemActive: { type: Boolean, required: true, default: true },
     },
   ],
-});
+}, {timestamps: true});
 
 const Tab = model("Tab", tabSchema);
 export default Tab;
