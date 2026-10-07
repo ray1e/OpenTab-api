@@ -1,4 +1,5 @@
 import { z } from "zod";
+import mongoose from "mongoose";
 
 const items = z.object({
   itemName: z.string().min(1, { message: "Item name is required" }),
@@ -11,12 +12,17 @@ const items = z.object({
   itemActive: z.boolean().optional(),
 });
 
-export const tabSchema = z.object({
-  //debtorId: z.guid().trim(),
+export const tabBodySchema = z.object({
   tabActive: z.boolean().optional(),
   dateTaken: z.iso
     .datetime({ error: "Date taken is required" })
     .max(new Date()),
   tabTotal: z.number().optional(),
   items: z.array(items),
+});
+
+export const tabParamsSchema = z.object({
+  debtorId: z.string().refine((val) => mongoose.Types.ObjectId.isValid(val), {
+    message: "Invalid MongoDB ObjectId",
+  }),
 });
