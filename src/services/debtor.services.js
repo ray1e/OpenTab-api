@@ -49,3 +49,37 @@ export const addDebtor = async (debtorData) => {
     await session.endSession();
   }
 };
+
+export const getOneDebtProfile = async (debtorId) => {
+  const session = await mongoose.startSession();
+
+  const transactionOptions = {
+    ReadPreference: "primary",
+    ReadConcern: { level: "local" },
+    WriteConcern: { w: "majority" },
+  };
+
+  try {
+    const transactionResults = await session.withTransaction(async () => {
+      const debtorProfile = await Debtor.findById(debtorId)
+        .session(session)
+        .select("-__v")
+        .lean();
+      if (!debtorProfile) {
+        await session.abortTransaction();
+        const error = new Error("Debtor profile not found");
+        error.statusCode = 404;
+        throw error;
+      }
+
+      const tabs = await Tab.find({ debtorId })
+        .select("-__v")
+        .lean()
+        .session(session);
+      return { debtorProfile, tabs };
+    }, transactionOptions);
+    return transactionResults;
+  } finally {
+    await session.endSession();
+  }
+};
