@@ -1,10 +1,9 @@
 import { Schema, model } from "mongoose";
 
-
 const tabSchema = new Schema({
   debtorId: {
     type: Schema.Types.ObjectId,
-    ref: Debtor,
+    ref: "Debtor",
     required: true,
     index: true,
   },
@@ -16,6 +15,7 @@ const tabSchema = new Schema({
       itemName: { type: String, required: true },
       itemPrice: { type: Number, required: true },
       itemQuantity: { type: Number, required: true },
+      itemActive: { type: Boolean, required: true, default: true },
     },
   ],
 });
