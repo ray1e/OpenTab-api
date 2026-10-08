@@ -12,7 +12,11 @@ export const validate = (schemas) => {
         }));
         return next(error);
       }
-      req[key] = result.data;
+      if (key === "query") {
+        res.locals.validatedQuery = result.data;
+      } else {
+        req[key] = result.data;
+      }
     }
     next();
   };
