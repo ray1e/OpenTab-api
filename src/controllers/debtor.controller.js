@@ -1,6 +1,7 @@
 import {
   addDebtor as addDebtorService,
   getOneDebtProfile as getOneDebtProfileService,
+  getAllDebtProfiles as getAllDebtProfilesService,
 } from "../services/debtor.services.js";
 
 export const addDebtor = async (req, res, next) => {
@@ -30,6 +31,26 @@ export const getOneDebtProfile = async (req, res, next) => {
       success: true,
       message: "Debt profile retrieved successfully",
       data: debtProfile,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAllDebtProfiles = async (req, res, next) => {
+  try {
+    const query = res.locals.validatedQuery;
+    const allDebtProfiles = await getAllDebtProfilesService(query);
+    if (!allDebtProfiles) {
+      const error = new Error("Debt profiles not found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Debt profiles retrieved successfully",
+      data: allDebtProfiles,
     });
   } catch (error) {
     next(error);

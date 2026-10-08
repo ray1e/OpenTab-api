@@ -1,6 +1,6 @@
+import mongoose from "mongoose";
 import Debtor from "../models/debtor.model.js";
 import Tab from "../models/tab.model.js";
-import mongoose from "mongoose";
 
 export const addDebtor = async (debtorData) => {
   const { name, dateTaken, items } = debtorData;
@@ -82,4 +82,31 @@ export const getOneDebtProfile = async (debtorId) => {
   } finally {
     await session.endSession();
   }
+};
+
+export const getAllDebtProfiles = async (query) => {
+  const { include } = query;
+  const allDebtors = await Debtor.find().select("-__v").lean();
+
+  const queryResults =
+    include === "tabs"
+      ? await Debtor.aggregate([
+          {
+            $lookup: {
+              from: "tabs",
+              localField: "_id",
+              foreignField: "debtorId",
+              as: "tabs",
+            },
+          },
+          {
+            $project: {
+              __v: 0,
+              "tabs.__v": 0,
+            },
+          },
+        ])
+      : allDebtors;
+
+  return queryResults;
 };
