@@ -47,3 +47,7 @@ export const tabsBodySchema = z.object({
 export const tabParamsSchema = z.object({
   debtorId: debtorIdSchema,
 });
+
+export const tabIdParamsSchema = z.object({
+  tabId: debtorIdSchema,
+});
