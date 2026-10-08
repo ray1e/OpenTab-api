@@ -12,17 +12,38 @@ const items = z.object({
   itemActive: z.boolean().optional(),
 });
 
+const debtorIdSchema = z
+  .string()
+  .refine((val) => mongoose.Types.ObjectId.isValid(val), {
+    message: "Invalid MongoDB ObjectId",
+  });
+
 export const tabBodySchema = z.object({
   tabActive: z.boolean().optional(),
   dateTaken: z.iso
     .datetime({ error: "Date taken is required" })
     .max(new Date()),
-  tabTotal: z.number().optional(),
   items: z.array(items),
 });
 
+export const tabUpdateBodySchema = tabBodySchema
+  .omit({ items: true })
+  .partial()
+  .strict()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: "At least one field must be provided",
+  });
+
+export const tabForExistingDebtSchema = tabBodySchema.extend({
+  debtorId: debtorIdSchema,
+});
+
+export const tabsBodySchema = z.object({
+  tabs: z
+    .array(tabForExistingDebtSchema)
+    .min(1, "At least one tab is required"),
+});
+
 export const tabParamsSchema = z.object({
-  debtorId: z.string().refine((val) => mongoose.Types.ObjectId.isValid(val), {
-    message: "Invalid MongoDB ObjectId",
-  }),
+  debtorId: debtorIdSchema,
 });
