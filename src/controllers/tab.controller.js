@@ -2,6 +2,7 @@ import {
   addNewTab as addNewTabService,
   updateTab as updateTabService,
   deactivateTab as deactivateTabService,
+  deleteTab as deleteTabService,
 } from "../services/tab.services.js";
 
 export const addNewTab = async (req, res, next) => {
@@ -54,6 +55,25 @@ export const deactivateTab = async (req, res, next) => {
       res.status(200).json({
         success: true,
         message: "Tab deactivated successfully",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteTab = async (req, res, next) => {
+  try {
+    const { tabId } = req.params;
+    const deletedTab = await deleteTabService(tabId);
+    if (!deletedTab) {
+      const error = new Error("Tab not found");
+      error.statusCode = 404;
+      throw error;
+    } else {
+      res.status(200).json({
+        success: true,
+        message: "Tab deleted successfully",
       });
     }
   } catch (error) {

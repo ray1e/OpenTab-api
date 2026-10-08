@@ -29,3 +29,8 @@ export const deactivateTab = async (tabId) => {
     return true;
   }
 };
+
+export const deleteTab = async (tabId) => {
+    const deletedTab = await Tab.findByIdAndDelete(tabId);
+    return deletedTab;
+}
