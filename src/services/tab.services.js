@@ -1,4 +1,5 @@
 import Tab from "../models/tab.model.js";
+import mongoose from "mongoose";
 
 export const addNewTab = async (tabs) => {
   if (!Array.isArray(tabs)) {
@@ -22,7 +23,7 @@ export const updateTab = async (tabId, body) => {
 export const deactivateTab = async (tabId) => {
   const tabDeactivated = await Tab.findByIdAndUpdate(
     { _id: tabId },
-    { "tabActive": "false" },
+    { tabActive: "false" },
     { returnDocument: "after", runValidators: "true" }
   );
   if (tabDeactivated) {
@@ -31,6 +32,24 @@ export const deactivateTab = async (tabId) => {
 };
 
 export const deleteTab = async (tabId) => {
-    const deletedTab = await Tab.findByIdAndDelete(tabId);
-    return deletedTab;
-}
+  const deletedTab = await Tab.findByIdAndDelete(tabId);
+  return deletedTab;
+};
+
+export const deleteManyTabs = async (tabIds) => {
+  const [, count] = await Tab.findAndCount({ _id: { $in: tabIds } }, null, {
+    sort: { _id: 1 },
+    limit: 10,
+  });
+  console.log(count);
+  console.log(tabIds.length);
+  if (count !== tabIds.length) {
+    const error = new Error("One or more tabs not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const { deletedCount } = await Tab.deleteMany({ _id: { $in: tabIds } });
+  console.log(deletedCount);
+  return deletedCount;
+};

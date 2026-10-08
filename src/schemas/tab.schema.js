@@ -51,3 +51,7 @@ export const tabParamsSchema = z.object({
 export const tabIdParamsSchema = z.object({
   tabId: debtorIdSchema,
 });
+
+export const deleteManyTabsSchema = z.object({
+  tabIds: z.array(debtorIdSchema).min(1, "At least one tab ID is required"),
+});

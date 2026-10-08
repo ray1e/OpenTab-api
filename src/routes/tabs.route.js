@@ -4,12 +4,14 @@ import {
   updateTab,
   deactivateTab,
   deleteTab,
+  deleteManyTabs,
 } from "../controllers/tab.controller.js";
 import { validate } from "../middlewares/validation.middleware.js";
 import {
   tabsBodySchema,
   tabUpdateBodySchema,
   tabIdParamsSchema,
+  deleteManyTabsSchema,
 } from "../schemas/tab.schema.js";
 
 const tabsRouter = Router();
@@ -32,6 +34,13 @@ tabsRouter.patch(
 );
 
 // delete a tab
-tabsRouter.delete("/:tabId", validate({ params: tabIdParamsSchema }), deleteTab);
+tabsRouter.delete(
+  "/:tabId",
+  validate({ params: tabIdParamsSchema }),
+  deleteTab
+);
+
+// delete many tabs
+tabsRouter.post("/bulk-delete", validate({ body: deleteManyTabsSchema }), deleteManyTabs);
 
 export default tabsRouter;
