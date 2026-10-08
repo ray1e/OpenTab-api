@@ -18,3 +18,14 @@ export const updateTab = async (tabId, body) => {
   );
   return updatedDocument;
 };
+
+export const deactivateTab = async (tabId) => {
+  const tabDeactivated = await Tab.findByIdAndUpdate(
+    { _id: tabId },
+    { "tabActive": "false" },
+    { returnDocument: "after", runValidators: "true" }
+  );
+  if (tabDeactivated) {
+    return true;
+  }
+};

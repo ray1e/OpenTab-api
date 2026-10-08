@@ -1,4 +1,8 @@
-import { addNewTab as addNewTabService, updateTab as updateTabService } from "../services/tab.services.js";
+import {
+  addNewTab as addNewTabService,
+  updateTab as updateTabService,
+  deactivateTab as deactivateTabService,
+} from "../services/tab.services.js";
 
 export const addNewTab = async (req, res, next) => {
   try {
@@ -29,6 +33,27 @@ export const updateTab = async (req, res, next) => {
         success: true,
         message: "Tab updated successfully",
         data: updatedTab,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deactivateTab = async (req, res, next) => {
+  try {
+    //const { tabStatus } = req.body;
+    const { tabId } = req.params;
+
+    const tabDeactivated = await deactivateTabService(tabId);
+    if (!tabDeactivated) {
+      const error = new Error("Tab not found");
+      error.statusCode = 404;
+      throw error;
+    } else {
+      res.status(200).json({
+        success: true,
+        message: "Tab deactivated successfully",
       });
     }
   } catch (error) {
