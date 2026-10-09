@@ -53,3 +53,37 @@ export const deleteManyTabs = async (tabIds) => {
   console.log(deletedCount);
   return deletedCount;
 };
+
+export const addItems = async (tabId, items) => {
+  const session = await mongoose.startSession();
+
+  try {
+    const updatedTab = await session.withTransaction(
+      async () => {
+        const tab = await Tab.findById(tabId).session(session);
+
+        if (!tab) {
+          const error = new Error("Tab not found");
+          error.statusCode = 404;
+          throw error;
+        }
+
+        const updatedTab = await Tab.findByIdAndUpdate(
+          tabId,
+          { $push: { items: { $each: items } } },
+          { returnDocument: "after", session }
+        );
+
+        return updatedTab;
+      },
+      {
+        readPreference: "primary",
+        readConcern: { level: "local" },
+        writeConcern: { w: "majority" },
+      }
+    );
+    return updatedTab;
+  } finally {
+    await session.endSession();
+  }
+};

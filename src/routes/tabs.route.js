@@ -5,6 +5,7 @@ import {
   deactivateTab,
   deleteTab,
   deleteManyTabs,
+  addItems
 } from "../controllers/tab.controller.js";
 import { validate } from "../middlewares/validation.middleware.js";
 import {
@@ -12,6 +13,7 @@ import {
   tabUpdateBodySchema,
   tabIdParamsSchema,
   deleteManyTabsSchema,
+  addItemsBodySchema
 } from "../schemas/tab.schema.js";
 
 const tabsRouter = Router();
@@ -41,6 +43,16 @@ tabsRouter.delete(
 );
 
 // delete many tabs
-tabsRouter.post("/bulk-delete", validate({ body: deleteManyTabsSchema }), deleteManyTabs);
+tabsRouter.post(
+  "/bulk-delete",
+  validate({ body: deleteManyTabsSchema }),
+  deleteManyTabs
+);
 
+//add items
+tabsRouter.post(
+  "/:tabId/items/",
+  validate({ body: addItemsBodySchema, params: tabIdParamsSchema }),
+  addItems
+);
 export default tabsRouter;
