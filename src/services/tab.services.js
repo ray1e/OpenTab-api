@@ -87,3 +87,26 @@ export const addItems = async (tabId, items) => {
     await session.endSession();
   }
 };
+
+export const deleteItem = async (tabId, itemId) => {
+  const updatedTab = await Tab.findOneAndUpdate(
+    { _id: tabId, "items._id": itemId },
+    { $pull: { items: { _id: itemId } } },
+    { returnDocument: "after" }
+  );
+
+  if (updatedTab) {
+    return updatedTab;
+  }
+
+  const tabExists = await Tab.exists({ _id: tabId });
+  if (!tabExists) {
+    const error = new Error("Tab not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const error = new Error("Item not found");
+  error.statusCode = 404;
+  throw error;
+};

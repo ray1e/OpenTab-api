@@ -5,13 +5,15 @@ import {
   deactivateTab,
   deleteTab,
   deleteManyTabs,
-  addItems
+  addItems,
+  deleteItem
 } from "../controllers/tab.controller.js";
 import { validate } from "../middlewares/validation.middleware.js";
 import {
   tabsBodySchema,
   tabUpdateBodySchema,
   tabIdParamsSchema,
+  tabItemParamsSchema,
   deleteManyTabsSchema,
   addItemsBodySchema
 } from "../schemas/tab.schema.js";
@@ -55,4 +57,15 @@ tabsRouter.post(
   validate({ body: addItemsBodySchema, params: tabIdParamsSchema }),
   addItems
 );
+
+//remove one item
+tabsRouter.delete(
+  "/:tabId/items/:itemId",
+  validate({ params: tabItemParamsSchema }),
+  deleteItem
+);
+
+//remove multiple items
+
+//update item details
 export default tabsRouter;

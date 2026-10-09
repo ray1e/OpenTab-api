@@ -4,7 +4,8 @@ import {
   deactivateTab as deactivateTabService,
   deleteTab as deleteTabService,
   deleteManyTabs as deleteManyTabsService,
-  addItems as addItemsService
+  addItems as addItemsService,
+  deleteItem as deleteItemService,
 } from "../services/tab.services.js";
 
 export const addNewTab = async (req, res, next) => {
@@ -90,7 +91,7 @@ export const deleteManyTabs = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Tabs deleted successfully",
-      data:  {deletedTabs: deletedCount} ,
+      data: { deletedTabs: deletedCount },
     });
   } catch (error) {
     next(error);
@@ -99,10 +100,10 @@ export const deleteManyTabs = async (req, res, next) => {
 
 export const addItems = async (req, res, next) => {
   try {
-    const {items} = req.body;
-    const {tabId} = req.params;
+    const { items } = req.body;
+    const { tabId } = req.params;
     const updatedTab = await addItemsService(tabId, items);
-    if (!updatedTab){
+    if (!updatedTab) {
       const error = new Error("Error adding Items");
       error.statusCode = 404;
       throw error;
@@ -110,9 +111,24 @@ export const addItems = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Items added successfully",
-      data: {updatedTab: updatedTab},
+      data: { updatedTab: updatedTab },
     });
   } catch (error) {
     next(error);
   }
-}
+};
+
+export const deleteItem = async (req, res, next) => {
+  try {
+    const { tabId, itemId } = req.params;
+    const updatedTab = await deleteItemService(tabId, itemId);
+
+    res.status(200).json({
+      success: true,
+      message: "Item deleted successfully",
+      data: updatedTab,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
