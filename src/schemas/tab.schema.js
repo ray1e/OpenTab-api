@@ -36,6 +36,11 @@ export const tabIdParamsSchema = z.object({
   tabId: debtorIdSchema,
 });
 
+// schema for validating both tabId and debtId
+export const tabItemParamsSchema = tabIdParamsSchema.extend({
+  itemId: debtorIdSchema,
+});
+
 // validate debtorId
 export const tabParamsSchema = z.object({
   debtorId: debtorIdSchema,
