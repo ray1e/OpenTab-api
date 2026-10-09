@@ -80,3 +80,8 @@ export const tabsBodySchema = z.object({
 export const deleteManyTabsSchema = z.object({
   tabIds: z.array(debtorIdSchema).min(1, "At least one tab ID is required"),
 });
+
+// validate an array of items
+export const deleteManyItemsSchema = z.object({
+  itemIds: z.array(debtorIdSchema).min(1, "At least one item ID is required"),
+});

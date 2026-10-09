@@ -6,6 +6,7 @@ import {
   deleteManyTabs as deleteManyTabsService,
   addItems as addItemsService,
   deleteItem as deleteItemService,
+  deleteManyItems as deleteManyItemsService,
 } from "../services/tab.services.js";
 
 export const addNewTab = async (req, res, next) => {
@@ -127,6 +128,21 @@ export const deleteItem = async (req, res, next) => {
       success: true,
       message: "Item deleted successfully",
       data: updatedTab,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteManyItems = async (req, res, next) => {
+  try {
+    const { itemIds } = req.body;
+    const { tabId } = req.params;
+    const newTab = await deleteManyItemsService(tabId, itemIds);
+    res.status(200).json({
+      success: true,
+      message: "Items deleted successfully",
+      data: newTab,
     });
   } catch (error) {
     next(error);

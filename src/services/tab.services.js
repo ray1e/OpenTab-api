@@ -110,3 +110,22 @@ export const deleteItem = async (tabId, itemId) => {
   error.statusCode = 404;
   throw error;
 };
+
+export const deleteManyItems = async (tabId, itemIds) => {
+  const updatedTab = await Tab.findOneAndUpdate(
+    { _id: tabId, "items._id": { $all: itemIds } },
+    { $pull: { items: { _id: { $in: itemIds } } } },
+    { returnDocument: "after" }
+  );
+
+  if (updatedTab) {
+    return updatedTab;
+  }
+
+  const tabExists = await Tab.exists({ _id: tabId });
+  const error = new Error(
+    tabExists ? "One or more items not found" : "Tab not found"
+  );
+  error.statusCode = 404;
+  throw error;
+};
