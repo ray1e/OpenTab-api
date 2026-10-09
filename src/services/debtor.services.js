@@ -65,8 +65,8 @@ export const getOneDebtProfile = async (debtorId) => {
         .session(session)
         .select("-__v")
         .lean();
+
       if (!debtorProfile) {
-        await session.abortTransaction();
         const error = new Error("Debtor profile not found");
         error.statusCode = 404;
         throw error;
