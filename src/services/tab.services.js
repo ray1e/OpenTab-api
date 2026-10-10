@@ -129,3 +129,75 @@ export const deleteManyItems = async (tabId, itemIds) => {
   error.statusCode = 404;
   throw error;
 };
+
+export const payItems = async (tabId, itemIds, datePaid) => {
+  const updatedTab = await Tab.findOneAndUpdate(
+    {
+      _id: tabId,
+      "items._id": { $all: itemIds },
+    },
+    {
+      $set: {
+        "items.$[item].itemPaid": true,
+        "items.$[item].datePaid": datePaid,
+      },
+    },
+    {
+      arrayFilters: [
+        {
+          "item._id": { $in: itemIds },
+          "item.itemPaid": { $ne: true },
+        },
+      ],
+      returnDocument: "after",
+    }
+  );
+
+  if (updatedTab) {
+    return updatedTab;
+  }
+
+  const tabExists = await Tab.exists({ _id: tabId });
+
+  const error = new Error(
+    tabExists ? "one or more items not found" : "Tab not found"
+  );
+  error.statusCode = 404;
+  throw error;
+};
+
+export const unpayItems = async (tabId, itemIds, datePaid) => {
+  const updatedTab = await Tab.findOneAndUpdate(
+    {
+      _id: tabId,
+      "items._id": { $all: itemIds },
+    },
+    {
+      $set: {
+        "items.$[item].itemPaid": false,
+      },
+      $unset: { "items.$[item].datePaid": "" },
+    },
+    {
+      arrayFilters: [
+        {
+          "item._id": { $in: itemIds },
+          "item.itemPaid": { $ne: false },
+        },
+      ],
+      returnDocument: "after",
+    }
+  );
+
+  if (updatedTab) {
+    return updatedTab;
+  }
+
+  const tabExists = await Tab.exists({ _id: tabId });
+
+  const error = new Error(
+    tabExists ? "one or more items not found" : "Tab not found"
+  );
+  error.statusCode = 404;
+  throw error;
+};

@@ -8,6 +8,8 @@ import {
   addItems,
   deleteItem,
   deleteManyItems,
+  payItems,
+  unpayItems,
 } from "../controllers/tab.controller.js";
 import { validate } from "../middlewares/validation.middleware.js";
 import {
@@ -15,9 +17,10 @@ import {
   tabUpdateBodySchema,
   tabIdParamsSchema,
   tabItemParamsSchema,
-  deleteManyTabsSchema,
+  tabIdsArraySchema,
   addItemsBodySchema,
-  deleteManyItemsSchema,
+  itemIdsArraySchema,
+  markItemsPaidBodySchema
 } from "../schemas/tab.schema.js";
 
 const tabsRouter = Router();
@@ -49,7 +52,7 @@ tabsRouter.delete(
 // delete many tabs
 tabsRouter.post(
   "/bulk-delete",
-  validate({ body: deleteManyTabsSchema }),
+  validate({ body: tabIdsArraySchema }),
   deleteManyTabs
 );
 
@@ -70,12 +73,23 @@ tabsRouter.delete(
 //remove multiple items
 tabsRouter.post(
   "/:tabId/items/bulk-delete",
-  validate({ body: deleteManyItemsSchema, params: tabIdParamsSchema }),
+  validate({ body: itemIdsArraySchema, params: tabIdParamsSchema }),
   deleteManyItems
 );
 
-//mark item as paid
+//mark item(s) as paid
+tabsRouter.post(
+  "/:tabId/items/pay",
+  validate({ params: tabIdParamsSchema, body: markItemsPaidBodySchema }),
+  payItems
+)
 
+//mark item(s) as unpaid
+tabsRouter.post(
+  "/:tabId/items/un-pay",
+  validate({ params: tabIdParamsSchema, body: markItemsPaidBodySchema }),
+  unpayItems
+)
 
 //update item details
 

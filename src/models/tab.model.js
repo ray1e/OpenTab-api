@@ -8,15 +8,17 @@ const tabSchema = new Schema({
     required: true,
     index: true,
   },
-  tabActive: { type: Boolean, required: true, default: true },
   dateTaken: { type: Date, required: true },
+  tabPaid: { type: Boolean, required: true, default: false },
+  datePaid: { type: Date },
   tabTotal: { type: Number, default: 0, required: true },
   items: [
     {
       itemName: { type: String, required: true },
       itemPrice: { type: Number, required: true },
       itemQuantity: { type: Number, required: true },
-      itemActive: { type: Boolean, required: true, default: true },
+      itemPaid: { type: Boolean, required: true, default: false },
+      datePaid: {type: Date}
     },
   ],
 }, {timestamps: true});
