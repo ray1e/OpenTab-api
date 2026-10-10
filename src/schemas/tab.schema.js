@@ -20,9 +20,7 @@ const debtorIdSchema = z
 
 // validate body when adding item
 export const addItemsBodySchema = z.object({
-  items: z
-    .array(items.strict())
-    .min(1, "At least one item is required"),
+  items: z.array(items.strict()).min(1, "At least one item is required"),
 });
 
 export const updateItemsBodySchema = items
@@ -48,7 +46,7 @@ export const tabParamsSchema = z.object({
 
 // For creating new tab where all fields are required
 export const tabBodySchema = z.object({
-  tabActive: z.boolean().optional(),
+  tabPaid: z.boolean().optional(),
   dateTaken: z.iso
     .datetime({ error: "Date taken is required" })
     .max(new Date()),
@@ -77,11 +75,19 @@ export const tabsBodySchema = z.object({
 });
 
 // validate an array of tabs
-export const deleteManyTabsSchema = z.object({
+export const tabIdsArraySchema = z.object({
   tabIds: z.array(debtorIdSchema).min(1, "At least one tab ID is required"),
 });
 
 // validate an array of items
-export const deleteManyItemsSchema = z.object({
+export const itemIdsArraySchema = z.object({
   itemIds: z.array(debtorIdSchema).min(1, "At least one item ID is required"),
+});
+
+export const datePaidSchema = z.iso
+  .datetime({ error: "Date paid is required" })
+  .max(new Date());
+
+export const markItemsPaidBodySchema = itemIdsArraySchema.extend({
+  datePaid: datePaidSchema,
 });
