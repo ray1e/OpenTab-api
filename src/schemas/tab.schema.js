@@ -9,13 +9,21 @@ const items = z.object({
   itemQuantity: z
     .number()
     .min(1, { message: "Item quantity must be at least 1" }),
-  itemActive: z.boolean().optional(),
+  itemPaid: z.boolean().optional(),
 });
 
 const debtorIdSchema = z
   .string()
   .refine((val) => mongoose.Types.ObjectId.isValid(val), {
     message: "Invalid MongoDB ObjectId",
+  });
+
+// update items
+export const updateItemsBodyschema = items
+  .partial()
+  .strict()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: "At least one field must be provided",
   });
 
 // validate body when adding item
