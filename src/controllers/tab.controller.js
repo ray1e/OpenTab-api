@@ -8,7 +8,8 @@ import {
   deleteItem as deleteItemService,
   deleteManyItems as deleteManyItemsService,
   payItems as payItemsService,
-  unpayItems as unpayItemsService
+  unpayItems as unpayItemsService,
+  updateItem as updateItemService,
 } from "../services/tab.services.js";
 
 export const addNewTab = async (req, res, next) => {
@@ -153,30 +154,45 @@ export const deleteManyItems = async (req, res, next) => {
 
 export const payItems = async (req, res, next) => {
   try {
-    const {itemIds, datePaid} = req.body
-    const {tabId} = req.params
+    const { itemIds, datePaid } = req.body;
+    const { tabId } = req.params;
     const updatedTab = await payItemsService(tabId, itemIds, datePaid);
     res.status(200).json({
       success: true,
       message: "Item(s) marked as paid successfully",
       data: updatedTab,
-    })
+    });
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const unpayItems = async (req, res, next) => {
   try {
-    const {itemIds, datePaid} = req.body
-    const {tabId} = req.params
-    const updatedTab = await unpayItemsService(tabId, itemIds, datePaid);
+    const { itemIds } = req.body;
+    const { tabId } = req.params;
+    const updatedTab = await unpayItemsService(tabId, itemIds);
     res.status(200).json({
       success: true,
       message: "Item(s) payment reversed succesfully",
       data: updatedTab,
-    })
+    });
   } catch (error) {
     next(error);
   }
-}
+};
+
+export const updateItem = async (req, res, next) => {
+  const { tabId, itemId } = req.params;
+  const body = req.body;
+  try {
+    const updatedItem = await updateItemService(tabId, itemId, body);
+    res.status(200).json({
+      success: true,
+      message: "Item updated successfully",
+      data: updatedItem,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

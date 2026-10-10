@@ -10,6 +10,7 @@ import {
   deleteManyItems,
   payItems,
   unpayItems,
+  updateItem,
 } from "../controllers/tab.controller.js";
 import { validate } from "../middlewares/validation.middleware.js";
 import {
@@ -20,7 +21,8 @@ import {
   tabIdsArraySchema,
   addItemsBodySchema,
   itemIdsArraySchema,
-  markItemsPaidBodySchema
+  markItemsPaidBodySchema,
+  updateItemsBodyschema,
 } from "../schemas/tab.schema.js";
 
 const tabsRouter = Router();
@@ -82,15 +84,20 @@ tabsRouter.post(
   "/:tabId/items/pay",
   validate({ params: tabIdParamsSchema, body: markItemsPaidBodySchema }),
   payItems
-)
+);
 
 //mark item(s) as unpaid
 tabsRouter.post(
   "/:tabId/items/un-pay",
   validate({ params: tabIdParamsSchema, body: markItemsPaidBodySchema }),
   unpayItems
-)
+);
 
 //update item details
+tabsRouter.patch(
+  "/:tabId/items/:itemId",
+  validate({ params: tabItemParamsSchema, body: updateItemsBodyschema }),
+  updateItem
+);
 
 export default tabsRouter;

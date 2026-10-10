@@ -166,7 +166,7 @@ export const payItems = async (tabId, itemIds, datePaid) => {
   throw error;
 };
 
-export const unpayItems = async (tabId, itemIds, datePaid) => {
+export const unpayItems = async (tabId, itemIds) => {
   const updatedTab = await Tab.findOneAndUpdate(
     {
       _id: tabId,
@@ -198,6 +198,30 @@ export const unpayItems = async (tabId, itemIds, datePaid) => {
   const error = new Error(
     tabExists ? "one or more items not found" : "Tab not found"
   );
+  error.statusCode = 404;
+  throw error;
+};
+
+export const updateItem = async (tabId, itemId, body) => {
+  const updateFields ={};
+  for (const [key, value] of Object.entries(body)){
+    updateFields[`items.$.${key}`] = value
+  }
+  console.log(updateFields)
+
+  const updatedTab = await Tab.findOneAndUpdate(
+    { _id: tabId, "items._id": itemId },
+    { $set: updateFields },
+    { returnDocument: "after" }
+  );
+  if (updatedTab) {
+    const updatedItem = updatedTab.items.filter(
+      (item) => item._id.toString() === itemId
+    );
+    return updatedItem;
+  }
+  const tabExists = Tab.exists({ _id: tabId });
+  const error = new Error(tabExists ? "Item not found" : "Tab not found");
   error.statusCode = 404;
   throw error;
 };
