@@ -1,5 +1,6 @@
 import Tab from "../models/tab.model.js";
 import mongoose from "mongoose";
+import { calculateTabTotalStorage } from "../pipelines/tab.pipelines.js";
 
 export const addNewTab = async (tabs) => {
   if (!Array.isArray(tabs)) {
@@ -70,8 +71,19 @@ export const addItems = async (tabId, items) => {
 
         const updatedTab = await Tab.findByIdAndUpdate(
           tabId,
-          { $push: { items: { $each: items } } },
-          { returnDocument: "after", session }
+          [
+            //stage 1: add item to items array
+            {
+              $set: {
+                items: {
+                  $concatArrays: [{ $ifNull: ["$items", []] }, items],
+                },
+              },
+            },
+            //stage 2: calculate tabTotal
+            calculateTabTotalStorage,
+          ],
+          { returnDocument: "after", session, updatePipeline: true }
         );
 
         return updatedTab;
@@ -203,11 +215,11 @@ export const unpayItems = async (tabId, itemIds) => {
 };
 
 export const updateItem = async (tabId, itemId, body) => {
-  const updateFields ={};
-  for (const [key, value] of Object.entries(body)){
-    updateFields[`items.$.${key}`] = value
+  const updateFields = {};
+  for (const [key, value] of Object.entries(body)) {
+    updateFields[`items.$.${key}`] = value;
   }
-  console.log(updateFields)
+  console.log(updateFields);
 
   const updatedTab = await Tab.findOneAndUpdate(
     { _id: tabId, "items._id": itemId },
