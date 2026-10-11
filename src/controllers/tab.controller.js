@@ -32,17 +32,12 @@ export const updateTab = async (req, res, next) => {
     const body = req.body;
     const { tabId } = req.params;
     const updatedTab = await updateTabService(tabId, body);
-    if (!updatedTab) {
-      const error = new Error("Tab not found");
-      error.statusCode = 404;
-      throw error;
-    } else {
-      res.status(200).json({
-        success: true,
-        message: "Tab updated successfully",
-        data: updatedTab,
-      });
-    }
+
+    res.status(200).json({
+      success: true,
+      message: "Tab updated successfully",
+      data: updatedTab,
+    });
   } catch (error) {
     next(error);
   }
@@ -53,17 +48,12 @@ export const deactivateTab = async (req, res, next) => {
     //const { tabStatus } = req.body;
     const { tabId } = req.params;
 
-    const tabDeactivated = await deactivateTabService(tabId);
-    if (!tabDeactivated) {
-      const error = new Error("Tab not found");
-      error.statusCode = 404;
-      throw error;
-    } else {
-      res.status(200).json({
-        success: true,
-        message: "Tab deactivated successfully",
-      });
-    }
+    await deactivateTabService(tabId);
+
+    res.status(200).json({
+      success: true,
+      message: "Tab deactivated successfully",
+    });
   } catch (error) {
     next(error);
   }
@@ -72,17 +62,12 @@ export const deactivateTab = async (req, res, next) => {
 export const deleteTab = async (req, res, next) => {
   try {
     const { tabId } = req.params;
-    const deletedTab = await deleteTabService(tabId);
-    if (!deletedTab) {
-      const error = new Error("Tab not found");
-      error.statusCode = 404;
-      throw error;
-    } else {
-      res.status(200).json({
-        success: true,
-        message: "Tab deleted successfully",
-      });
-    }
+    await deleteTabService(tabId);
+
+    res.status(200).json({
+      success: true,
+      message: "Tab deleted successfully",
+    });
   } catch (error) {
     next(error);
   }
@@ -107,11 +92,7 @@ export const addItems = async (req, res, next) => {
     const { items } = req.body;
     const { tabId } = req.params;
     const updatedTab = await addItemsService(tabId, items);
-    if (!updatedTab) {
-      const error = new Error("Error adding Items");
-      error.statusCode = 404;
-      throw error;
-    }
+
     res.status(200).json({
       success: true,
       message: "Items added successfully",

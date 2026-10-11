@@ -18,6 +18,12 @@ export const updateTab = async (tabId, body) => {
     { ...body },
     { returnDocument: "after", runValidators: "true" }
   );
+
+  if (!updatedDocument) {
+    const error = new Error("Tab not found");
+    error.statusCode = 404;
+    throw error;
+  }
   return updatedDocument;
 };
 
@@ -27,13 +33,22 @@ export const deactivateTab = async (tabId) => {
     { tabActive: "false" },
     { returnDocument: "after", runValidators: "true" }
   );
-  if (tabDeactivated) {
-    return true;
+  if (!tabDeactivated) {
+    const error = new Error("Tab not found");
+    error.statusCode = 404;
+    throw error;
   }
+
+  return true;
 };
 
 export const deleteTab = async (tabId) => {
   const deletedTab = await Tab.findByIdAndDelete(tabId);
+  if (!deletedTab) {
+    const error = new Error("Tab not found");
+    error.statusCode = 404;
+    throw error;
+  }
   return deletedTab;
 };
 
@@ -85,7 +100,11 @@ export const addItems = async (tabId, items) => {
           ],
           { returnDocument: "after", session, updatePipeline: true }
         );
-
+        if (!updatedTab) {
+          const error = new Error("Error adding Items");
+          error.statusCode = 404;
+          throw error;
+        }
         return updatedTab;
       },
       {
