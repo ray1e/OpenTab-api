@@ -10,6 +10,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/server.js"
   },
+  "jest": {
+    "testMatch": ["**/*.test.ts"]
+  },
   "dependencies": {
     "dotenv": "^18.0.5",
     "express": "^5.2.1",
