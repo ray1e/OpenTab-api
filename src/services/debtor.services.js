@@ -20,7 +20,6 @@ export const addDebtor = async (debtorData) => {
     const transactionResults = await session.withTransaction(async () => {
       // add debtor profile i.e name to Debtors collection
       const [debtorProfile] = await Debtor.create([{ name }], { session });
-      console.log(`debtorProfile is ${debtorProfile}`);
 
       if (!debtorProfile) {
         await session.abortTransaction();
@@ -41,7 +40,6 @@ export const addDebtor = async (debtorData) => {
         { session }
       );
       const createdProfileAndTab = { debtor: debtorProfile, tabs };
-      console.log(createdProfileAndTab);
       return createdProfileAndTab;
     }, transactionOptions);
     return transactionResults;
