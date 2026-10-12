@@ -1,7 +1,5 @@
 import express from "express";
-import ENV from "./config/env.js";
 import { setServers } from "node:dns/promises";
-import connectDB from "./config/db.js";
 import debtorsRouter from "./routes/debtors.route.js";
 import tabsRouter from "./routes/tabs.route.js";
 import reportsRouter from "./routes/reports.route.js";
@@ -10,7 +8,7 @@ import morgan from "morgan";
 
 setServers(["1.1.1.1", "8.8.8.8"]);
 
-const app = express();
+export const app = express();
 app.use(express.json());
 app.use(morgan("dev"))
 const BASE_ROUTE = "/api/v1";
@@ -33,24 +31,4 @@ app.use("/api/v1/health", (req, res) => {
 app.use(notFound);
 app.use(errorHandler);
 
-const startServer = async () => {
-  try {
-    const conn = await connectDB();
-    if (conn.readyState === 1) {
-      console.log("Database connection succesfully");
-      app.listen(ENV.PORT, () => {
-        console.log(
-          `Server is running on port ${ENV.PORT} in ${ENV.NODE_ENV} mode`
-        );
-      });
-    } else {
-      console.error(`Database connection failed ${error.message}`);
-      process.exit(1);
-    }
-  } catch (error) {
-    console.error(`Failed to start server: ${error}`);
-    process.exit(1);
-  }
-};
 
-startServer();
