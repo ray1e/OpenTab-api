@@ -10,9 +10,50 @@ describe("debtor controller", () => {
         .set("Connection", "close")
         .send(reqAddDebtor)
         .set("Content-Type", "application/json");
-      console.dir({ status: res.status, body: res.body }, { depth: null });
+      //console.dir({ status: res.status, body: res.body }, { depth: null });
       expect(res.status).toBe(201);
       expect(res.body).toMatchObject(resAddDebtor);
+    });
+  });
+
+  describe("get all debt profiles", () => {
+    beforeEach(
+      async () =>
+        await request(app)
+          .post("/api/v1/debtors")
+          .set("Connection", "close")
+          .send(reqAddDebtor)
+          .set("Content-Type", "application/json")
+    );
+
+    it("returns 200 and all debt profiles when include=tabs query is provided", async () => {
+      const res = await request(app).get("/api/v1/debtors?include=tabs");
+      const debtor = res.body.data[0];
+      expect(res.status).toBe(200);
+      expect(debtor).toHaveProperty("_id");
+      expect(debtor).toHaveProperty("name");
+      expect(debtor.tabs[0]).toHaveProperty("debtorId");
+      expect(debtor.tabs[0]).toHaveProperty("dateTaken");
+      expect(debtor.tabs[0]).toHaveProperty("tabTotal");
+      expect(debtor.tabs[0]).toHaveProperty("tabPaid");
+      expect(debtor.tabs[0]).toHaveProperty("items");
+      expect(debtor.tabs[0].items[0]).toHaveProperty("itemName");
+      expect(debtor.tabs[0].items[0]).toHaveProperty("itemPrice");
+      expect(debtor.tabs[0].items[0]).toHaveProperty("itemQuantity");
+      expect(debtor.tabs[0].items[0]).toHaveProperty("itemPaid");
+      expect(debtor.tabs[0].items[0]).toHaveProperty("_id");
+    });
+
+    it("returns 400 when unknown query parameters are passed", async () => {
+      const res = await request(app).get("/api/v1/debtors?includesss=tabs");
+
+      expect(res.status).toBe(400);
+    });
+
+    it("returns 400 when unknown include values are passed", async () => {
+      const res = await request(app).get("/api/v1/debtors?include=tabsss");
+
+      expect(res.status).toBe(400);
     });
   });
 });
