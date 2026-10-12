@@ -8,7 +8,7 @@ import morgan from "morgan";
 
 setServers(["1.1.1.1", "8.8.8.8"]);
 
-export const app = express();
+const app = express();
 app.use(express.json());
 app.use(morgan("dev"))
 const BASE_ROUTE = "/api/v1";
@@ -31,4 +31,4 @@ app.use("/api/v1/health", (req, res) => {
 app.use(notFound);
 app.use(errorHandler);
 
-
+export default app;
