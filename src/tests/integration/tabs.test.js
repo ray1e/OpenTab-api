@@ -117,7 +117,7 @@ describe("tab controller", () => {
         .set("Content-Type", "application/json");
     });
 
-    it("returns 200", async () => {
+    it("returns 200 and deletes the tab", async () => {
       const fullResponse = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
