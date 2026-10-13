@@ -36,6 +36,41 @@ export const getOneDebtProfile = async (req, res, next) => {
     next(error);
   }
 };
+/* "data": {
+        "debtorProfile": {
+            "_id": "6acdcdba7787bbe05df7c6d3",
+            "name": "simon",
+            "createdAt": "2026-10-13T06:20:42.068Z",
+            "updatedAt": "2026-10-13T06:20:42.068Z"
+        },
+        "tabs": [
+            {
+                "_id": "6acdcdba7787bbe05df7c6d4",
+                "debtorId": "6acdcdba7787bbe05df7c6d3",
+                "dateTaken": "2026-10-08T09:00:00.000Z",
+                "tabTotal": 0,
+                "tabPaid": false,
+                "items": [
+                    {
+                        "itemName": "Coffee",
+                        "itemPrice": 3.5,
+                        "itemQuantity": 2,
+                        "itemPaid": false,
+                        "_id": "6acdcdba7787bbe05df7c6d5"
+                    },
+                    {
+                        "itemName": "Sandwich",
+                        "itemPrice": 8,
+                        "itemQuantity": 1,
+                        "itemPaid": false,
+                        "_id": "6acdcdba7787bbe05df7c6d6"
+                    }
+                ],
+                "createdAt": "2026-10-13T06:20:42.351Z",
+                "updatedAt": "2026-10-13T06:20:42.351Z"
+            }
+        ]
+    } */
 
 export const getAllDebtProfiles = async (req, res, next) => {
   try {
