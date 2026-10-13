@@ -26,6 +26,14 @@ describe("debtor controller", () => {
           .set("Content-Type", "application/json")
     );
 
+    it("returns 200 and debtors when no query is provided", async () => {
+      const res = await request(app).get("/api/v1/debtors");
+      const debtor = res.body.data[0];
+      expect(res.status).toBe(200);
+      expect(debtor).toHaveProperty("_id");
+      expect(debtor).toHaveProperty("name");
+    });
+
     it("returns 200 and all debt profiles when include=tabs query is provided", async () => {
       const res = await request(app).get("/api/v1/debtors?include=tabs");
       const debtor = res.body.data[0];
@@ -53,6 +61,37 @@ describe("debtor controller", () => {
     it("returns 400 when unknown include values are passed", async () => {
       const res = await request(app).get("/api/v1/debtors?include=tabsss");
 
+      expect(res.status).toBe(400);
+    });
+  });
+
+  describe("get one debt profile", () => {
+    beforeEach(
+      async () =>
+        await request(app)
+          .post("/api/v1/debtors")
+          .set("Connection", "close")
+          .send(reqAddDebtor)
+          .set("Content-Type", "application/json")
+    );
+    it("returns 200 and a debt profile", async () => {
+      const getRes = await request(app).get("/api/v1/debtors");
+      const debtorId = getRes.body.data[0]._id;
+      const res = await request(app).get(
+        `/api/v1/debtors/${debtorId}/debt-profile`
+      );
+      const debtorProfile = res.body.data;
+
+      expect(res.status).toBe(200);
+      expect(debtorProfile).toHaveProperty("debtorProfile");
+      expect(debtorProfile).toHaveProperty("tabs");
+    });
+
+    it("returns 400 when invalid debtorId is used", async () => {
+      const debtorId = "67kdcdb67787bbe05df7c643";
+      const res = await request(app).get(
+        `/api/v1/debtors/${debtorId}/debt-profile`
+      );
       expect(res.status).toBe(400);
     });
   });
