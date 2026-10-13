@@ -32,7 +32,7 @@ tabsRouter.post("/", validate({ body: tabsBodySchema }), addNewTab);
 
 //mark a tab as paid
 tabsRouter.patch(
-  "/:tabId/deactivate",
+  "/:tabId/pay",
   validate({ params: tabIdParamsSchema }),
   deactivateTab
 );
