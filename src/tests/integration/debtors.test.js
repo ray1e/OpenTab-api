@@ -28,28 +28,49 @@ describe("debtor controller", () => {
 
     it("returns 200 and debtors when no query is provided", async () => {
       const res = await request(app).get("/api/v1/debtors");
-      const debtor = res.body.data[0];
+      const debtor = res.body.data.queryResults[0];
       expect(res.status).toBe(200);
-      expect(debtor).toHaveProperty("_id");
-      expect(debtor).toHaveProperty("name");
+      expect(debtor).toEqual(
+        expect.objectContaining({
+          _id: expect.any(String),
+          name: expect.any(String),
+        })
+      );
     });
 
     it("returns 200 and all debt profiles when include=tabs query is provided", async () => {
       const res = await request(app).get("/api/v1/debtors?include=tabs");
-      const debtor = res.body.data[0];
+      const debtor = res.body.data.queryResults[0];
       expect(res.status).toBe(200);
-      expect(debtor).toHaveProperty("_id");
-      expect(debtor).toHaveProperty("name");
-      expect(debtor.tabs[0]).toHaveProperty("debtorId");
-      expect(debtor.tabs[0]).toHaveProperty("dateTaken");
-      expect(debtor.tabs[0]).toHaveProperty("tabTotal");
-      expect(debtor.tabs[0]).toHaveProperty("tabPaid");
-      expect(debtor.tabs[0]).toHaveProperty("items");
-      expect(debtor.tabs[0].items[0]).toHaveProperty("itemName");
-      expect(debtor.tabs[0].items[0]).toHaveProperty("itemPrice");
-      expect(debtor.tabs[0].items[0]).toHaveProperty("itemQuantity");
-      expect(debtor.tabs[0].items[0]).toHaveProperty("itemPaid");
-      expect(debtor.tabs[0].items[0]).toHaveProperty("_id");
+      expect(res.body.data).toEqual(
+        expect.objectContaining({
+          queryResults: expect.any(Array),
+          hasNextPage: expect.any(Boolean),
+        })
+      );
+      expect(debtor).toEqual(
+        expect.objectContaining({
+          _id: expect.any(String),
+          name: expect.any(String),
+          tabs: expect.arrayContaining([
+            expect.objectContaining({
+              debtorId: expect.any(String),
+              dateTaken: expect.any(String),
+              tabTotal: expect.any(Number),
+              tabPaid: expect.any(Boolean),
+              items: expect.arrayContaining([
+                expect.objectContaining({
+                  itemName: expect.any(String),
+                  itemPrice: expect.any(Number),
+                  itemQuantity: expect.any(Number),
+                  itemPaid: expect.any(Boolean),
+                  _id: expect.any(String),
+                }),
+              ]),
+            }),
+          ]),
+        })
+      );
     });
 
     it("returns 400 when unknown query parameters are passed", async () => {
@@ -76,7 +97,7 @@ describe("debtor controller", () => {
     );
     it("returns 200 and a debt profile", async () => {
       const getRes = await request(app).get("/api/v1/debtors");
-      const debtorId = getRes.body.data[0]._id;
+      const debtorId = getRes.body.data.queryResults[0]._id;
       const res = await request(app).get(
         `/api/v1/debtors/${debtorId}/debt-profile`
       );
