@@ -57,8 +57,6 @@ export const deleteManyTabs = async (tabIds) => {
     sort: { _id: 1 },
     limit: 10,
   });
-  console.log(count);
-  console.log(tabIds.length);
   if (count !== tabIds.length) {
     const error = new Error("One or more tabs not found");
     error.statusCode = 404;
@@ -66,7 +64,6 @@ export const deleteManyTabs = async (tabIds) => {
   }
 
   const { deletedCount } = await Tab.deleteMany({ _id: { $in: tabIds } });
-  console.log(deletedCount);
   return deletedCount;
 };
 
@@ -238,7 +235,6 @@ export const updateItem = async (tabId, itemId, body) => {
   for (const [key, value] of Object.entries(body)) {
     updateFields[`items.$.${key}`] = value;
   }
-  console.log(updateFields);
 
   const updatedTab = await Tab.findOneAndUpdate(
     { _id: tabId, "items._id": itemId },

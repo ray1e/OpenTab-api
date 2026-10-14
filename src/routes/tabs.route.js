@@ -60,7 +60,7 @@ tabsRouter.post(
 
 //add items
 tabsRouter.post(
-  "/:tabId/items/",
+  "/:tabId/items",
   validate({ body: addItemsBodySchema, params: tabIdParamsSchema }),
   addItems
 );

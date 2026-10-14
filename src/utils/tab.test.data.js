@@ -65,3 +65,18 @@ export const invalidReqAddTabs = {
 export const reqUpdateTab = {
   tabPaid: true,
 };
+
+export const reqCreateItems = {
+  items: [
+    {
+      itemName: "Latte",
+      itemPrice: 4.5,
+      itemQuantity: 1,
+    },
+    {
+      itemName: "Muffin",
+      itemPrice: 2.5,
+      itemQuantity: 2,
+    },
+  ]
+}
