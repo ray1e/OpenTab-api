@@ -83,7 +83,7 @@ export const getOneDebtProfile = async (debtorId) => {
 };
 
 export const getAllDebtProfiles = async (query) => {
-  const { include } = query;
+  const { include, page = 1, limit = 10 } = query;
   const allDebtors = await Debtor.find().select("-__v").lean();
 
   const queryResults =
@@ -98,13 +98,27 @@ export const getAllDebtProfiles = async (query) => {
             },
           },
           {
+            $addFields: {
+              latestTabDate: { $max: ["$tabs.dateTaken"] },
+            },
+          },
+          { $sort: { latestTabDate: -1 } },
+          { $skip: (page - 1) * limit },
+          { $limit: limit + 1 },
+          {
             $project: {
               __v: 0,
               "tabs.__v": 0,
+              latestTabDate: 0,
             },
           },
         ])
       : allDebtors;
+  let hasNextPage = false;
+  if (queryResults.length > limit){
+    hasNextPage = true;
+    queryResults.pop();
+  }
 
-  return queryResults;
+  return {queryResults, hasNextPage};
 };
