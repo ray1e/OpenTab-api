@@ -7,7 +7,6 @@ import {
   reqCreateItems,
 } from "../../utils/tab.test.data.js";
 import { reqAddDebtor } from "../../utils/debtor.test.data.js";
-import Tab from "../../models/tab.model.js";
 
 describe("tab controller", () => {
   describe("create tab", () => {
@@ -54,7 +53,7 @@ describe("tab controller", () => {
       const fullResponse = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
-      const tabId = fullResponse.body.data[0].tabs[0]._id;
+      const tabId = fullResponse.body.data.queryResults[0].tabs[0]._id;
       const res = await request(app).patch(`/api/v1/tabs/${tabId}/pay`);
       expect(res.status).toBe(200);
     });
@@ -73,7 +72,7 @@ describe("tab controller", () => {
       const fullResponse = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
-      const tabId = fullResponse.body.data[0].tabs[0]._id;
+      const tabId = fullResponse.body.data.queryResults[0].tabs[0]._id;
       const res = await request(app)
         .patch(`/api/v1/tabs/${tabId}`)
         .send(reqUpdateTab);
@@ -91,7 +90,7 @@ describe("tab controller", () => {
       const fullResponse = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
-      const tabId = fullResponse.body.data[0].tabs[0]._id;
+      const tabId = fullResponse.body.data.queryResults[0].tabs[0]._id;
       const res = await request(app)
         .patch(`/api/v1/tabs/${tabId}`)
         .send({ dateTaken: "today" });
@@ -102,7 +101,7 @@ describe("tab controller", () => {
       const fullResponse = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
-      const tabId = fullResponse.body.data[0].tabs[0]._id;
+      const tabId = fullResponse.body.data.queryResults[0].tabs[0]._id;
       const res = await request(app)
         .patch(`/api/v1/tabs/${tabId}`)
         .send({ _id: "6acb6912404927495ab19e11" });
@@ -123,7 +122,7 @@ describe("tab controller", () => {
       const fullResponse = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
-      const tabId = fullResponse.body.data[0].tabs[0]._id;
+      const tabId = fullResponse.body.data.queryResults[0].tabs[0]._id;
       const res = await request(app).delete(`/api/v1/tabs/${tabId}`);
 
       expect(res.status).toBe(200);
@@ -192,7 +191,7 @@ describe("tab controller", () => {
       const fullResponse = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
-      const tabId = fullResponse.body.data[0].tabs[0]._id;
+      const tabId = fullResponse.body.data.queryResults[0].tabs[0]._id;
       const res = await request(app)
         .post(`/api/v1/tabs/${tabId}/items`)
         .send(reqCreateItems);
@@ -212,7 +211,7 @@ describe("tab controller", () => {
       const fullResponse = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
-      const tabId = fullResponse.body.data[0].tabs[0]._id;
+      const tabId = fullResponse.body.data.queryResults[0].tabs[0]._id;
       const res = await request(app)
         .post(`/api/v1/tabs/${tabId}/items`)
         .send({
@@ -257,8 +256,8 @@ describe("tab controller", () => {
       const fullResponse = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
-      const tabId = fullResponse.body.data[0].tabs[0]._id;
-      const itemId = fullResponse.body.data[0].tabs[0].items[0]._id;
+      const tabId = fullResponse.body.data.queryResults[0].tabs[0]._id;
+      const itemId = fullResponse.body.data.queryResults[0].tabs[0].items[0]._id;
       const res = await request(app).delete(
         `/api/v1/tabs/${tabId}/items/${itemId}`
       );
@@ -267,7 +266,7 @@ describe("tab controller", () => {
         "/api/v1/debtors?include=tabs"
       );
       const deletedItemId =
-        afterDeleteResponse.body.data[0].tabs[0].items[0]._id;
+        afterDeleteResponse.body.data.queryResults[0].tabs[0].items[0]._id;
 
       expect(deletedItemId).not.toBe(itemId);
       expect(res.status).toBe(200);
@@ -278,7 +277,7 @@ describe("tab controller", () => {
         "/api/v1/debtors?include=tabs"
       );
       const tabId = "68edc8ec7e5d4a2f9b31c670";
-      const itemId = fullResponse.body.data[0].tabs[0].items[0]._id;
+      const itemId = fullResponse.body.data.queryResults[0].tabs[0].items[0]._id;
       const res = await request(app).delete(
         `/api/v1/tabs/${tabId}/items/${itemId}`
       );
@@ -290,7 +289,7 @@ describe("tab controller", () => {
       const fullResponse = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
-      const tabId = fullResponse.body.data[0].tabs[0]._id;
+      const tabId = fullResponse.body.data.queryResults[0].tabs[0]._id;
       const itemId = "68edc8ec7e5d4a2f9b31c670";
       const res = await request(app).delete(
         `/api/v1/tabs/${tabId}/items/${itemId}`
@@ -304,7 +303,7 @@ describe("tab controller", () => {
         "/api/v1/debtors?include=tabs"
       );
       const tabId = "68edc8ec7e5d4a2f9b3132670";
-      const itemId = fullResponse.body.data[0].tabs[0].items[0]._id;
+      const itemId = fullResponse.body.data.queryResults[0].tabs[0].items[0]._id;
       const res = await request(app).delete(
         `/api/v1/tabs/${tabId}/items/${itemId}`
       );
@@ -316,7 +315,7 @@ describe("tab controller", () => {
       const fullResponse = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
-      const tabId = fullResponse.body.data[0].tabs[0]._id;
+      const tabId = fullResponse.body.data.queryResults[0].tabs[0]._id;
       const itemId = "68edc8ec7e5d4a2f9b31c6703";
       const res = await request(app).delete(
         `/api/v1/tabs/${tabId}/items/${itemId}`
@@ -339,7 +338,7 @@ describe("tab controller", () => {
       const fullDebtProfile = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
-      const tabId = fullDebtProfile.body.data[0].tabs[0]._id;
+      const tabId = fullDebtProfile.body.data.queryResults[0].tabs[0]._id;
       const res = await request(app)
         .post(`/api/v1/tabs/${tabId}/items/bulk-delete`)
         .send({ itemIds: [] });
@@ -351,7 +350,7 @@ describe("tab controller", () => {
       const fullDebtProfile = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
-      const tabId = fullDebtProfile.body.data[0].tabs[0]._id;
+      const tabId = fullDebtProfile.body.data.queryResults[0].tabs[0]._id;
       const res = await request(app)
         .post(`/api/v1/tabs/${tabId}/items/bulk-delete`)
         .send({ itemIds: ["68edc8ec7e5d4a2f9b31c670"] });
@@ -363,7 +362,7 @@ describe("tab controller", () => {
       const fullDebtProfile = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
-      const tabId = fullDebtProfile.body.data[0].tabs[0]._id;
+      const tabId = fullDebtProfile.body.data.queryResults[0].tabs[0]._id;
       const res = await request(app)
         .post(`/api/v1/tabs/${tabId}/items/bulk-delete`)
         .send({ itemIds: ["invalid-item-id"] });
@@ -391,8 +390,8 @@ describe("tab controller", () => {
       const fullDebtProfile = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
-      const tabId = fullDebtProfile.body.data[0].tabs[0]._id;
-      const itemIds = fullDebtProfile.body.data[0].tabs[0].items.map((item) =>
+      const tabId = fullDebtProfile.body.data.queryResults[0].tabs[0]._id;
+      const itemIds = fullDebtProfile.body.data.queryResults[0].tabs[0].items.map((item) =>
         item._id.toString()
       );
 
