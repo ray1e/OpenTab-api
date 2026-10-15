@@ -11,5 +11,12 @@ export const debtorBodySchema = z.object({
 export const debtorQuerySchema = z
   .object({
     include: z.enum(["tabs"]).optional(),
+    tabPaid: z.enum(["true", "false"]).optional(),
+    page: z.coerce.number().default(1),
+    limit: z.coerce.number().default(10),
+  })
+  .refine((data) => !(data.tabPaid && data.include !== "tabs"), {
+    message: "'tabPaid' filter requires 'include=tabs'",
+    path: ["tabPaid"],
   })
   .strict();
