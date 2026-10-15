@@ -83,8 +83,14 @@ export const getOneDebtProfile = async (debtorId) => {
 };
 
 export const getAllDebtProfiles = async (query) => {
-  const { include, page = 1, limit = 10 } = query;
+  const { include, page = 1, limit = 10, tabPaid } = query;
   const allDebtors = await Debtor.find().select("-__v").lean();
+
+  const tabMatchCondition = [{ $eq: ["$debtorId", "$$debtorId"] }];
+
+  if (tabPaid !== undefined) {
+    tabMatchCondition.push({ $eq: ["$tabPaid", tabPaid === "true"] });
+  }
 
   const queryResults =
     include === "tabs"
@@ -92,17 +98,27 @@ export const getAllDebtProfiles = async (query) => {
           {
             $lookup: {
               from: "tabs",
-              localField: "_id",
-              foreignField: "debtorId",
+              let: { debtorId: "$_id" },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $and: tabMatchCondition,
+                    },
+                  },
+                },
+                { $sort: { dateTaken: -1 } },
+                { $project: { __v: 0 } },
+              ],
               as: "tabs",
             },
           },
           {
             $addFields: {
-              latestTabDate: { $max: ["$tabs.dateTaken"] },
+              latestTabDate: { $max: "$tabs.dateTaken" },
             },
           },
-          { $sort: { latestTabDate: -1 } },
+          { $sort: { latestTabDate: -1, _id: 1 } },
           { $skip: (page - 1) * limit },
           { $limit: limit + 1 },
           {
@@ -115,10 +131,10 @@ export const getAllDebtProfiles = async (query) => {
         ])
       : allDebtors;
   let hasNextPage = false;
-  if (queryResults.length > limit){
+  if (queryResults.length > limit) {
     hasNextPage = true;
     queryResults.pop();
   }
 
-  return {queryResults, hasNextPage};
+  return { queryResults, hasNextPage };
 };
