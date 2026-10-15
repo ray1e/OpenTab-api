@@ -118,7 +118,7 @@ describe("tab controller", () => {
         .set("Content-Type", "application/json");
     });
 
-    it("returns 200 and deletes the tab", async () => {
+    it(" deletes the tab returns 200 and", async () => {
       const fullResponse = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
@@ -252,12 +252,13 @@ describe("tab controller", () => {
         .set("Content-Type", "application/json");
     });
 
-    it("return 200 and deletes item", async () => {
+    it("deletes item return 200 and", async () => {
       const fullResponse = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
       const tabId = fullResponse.body.data.queryResults[0].tabs[0]._id;
-      const itemId = fullResponse.body.data.queryResults[0].tabs[0].items[0]._id;
+      const itemId =
+        fullResponse.body.data.queryResults[0].tabs[0].items[0]._id;
       const res = await request(app).delete(
         `/api/v1/tabs/${tabId}/items/${itemId}`
       );
@@ -276,8 +277,11 @@ describe("tab controller", () => {
       const fullResponse = await request(app).get(
         "/api/v1/debtors?include=tabs"
       );
-      const tabId = "68edc8ec7e5d4a2f9b31c670";
-      const itemId = fullResponse.body.data.queryResults[0].tabs[0].items[0]._id;
+      const tabId = "6ac9ed61f2ab2bb482490437";
+      const itemId =
+        fullResponse.body.data.queryResults[0].tabs[0].items[0]._id;
+      console.log(tabId);
+      console.log(itemId)
       const res = await request(app).delete(
         `/api/v1/tabs/${tabId}/items/${itemId}`
       );
@@ -303,7 +307,8 @@ describe("tab controller", () => {
         "/api/v1/debtors?include=tabs"
       );
       const tabId = "68edc8ec7e5d4a2f9b3132670";
-      const itemId = fullResponse.body.data.queryResults[0].tabs[0].items[0]._id;
+      const itemId =
+        fullResponse.body.data.queryResults[0].tabs[0].items[0]._id;
       const res = await request(app).delete(
         `/api/v1/tabs/${tabId}/items/${itemId}`
       );
@@ -391,9 +396,10 @@ describe("tab controller", () => {
         "/api/v1/debtors?include=tabs"
       );
       const tabId = fullDebtProfile.body.data.queryResults[0].tabs[0]._id;
-      const itemIds = fullDebtProfile.body.data.queryResults[0].tabs[0].items.map((item) =>
-        item._id.toString()
-      );
+      const itemIds =
+        fullDebtProfile.body.data.queryResults[0].tabs[0].items.map((item) =>
+          item._id.toString()
+        );
 
       const res = await request(app)
         .post(`/api/v1/tabs/${tabId}/items/bulk-delete`)

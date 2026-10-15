@@ -122,8 +122,11 @@ export const deleteItem = async (tabId, itemId) => {
     { $pull: { items: { _id: itemId } } },
     { returnDocument: "after" }
   );
-
   if (updatedTab) {
+    const isTabEmpty = updatedTab.items.length === 0 && true;
+    if (isTabEmpty) {
+      await Tab.findByIdAndDelete(tabId);
+    }
     return updatedTab;
   }
 
