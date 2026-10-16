@@ -7,7 +7,7 @@ import eslintConfigPrettier from "eslint-config-prettier";
 export default defineConfig([
   {
     files: ["**/*.{js,mjs,cjs}"],
-    plugins: { js, importX },
+    plugins: { js, 'import-x': importX },
     extends: ["js/recommended", "import-x/flat/recommend"],
     languageOptions: { globals: globals.node },
   },
