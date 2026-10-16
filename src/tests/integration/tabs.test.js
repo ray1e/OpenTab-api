@@ -137,13 +137,12 @@ describe("tab controller", () => {
         .set("Content-Type", "application/json");
     }); */
     it("returns 200, number of deleted tabs and deletes the tabs", async () => {
-      let createdTabIds = [];
       const createdTabs = await request(app)
         .post("/api/v1/tabs")
         .send(reqAddTabs)
         .set("Content-Type", "application/json");
 
-      createdTabIds = createdTabs.body.data.map((tab) => tab._id.toString());
+      const createdTabIds = createdTabs.body.data.map((tab) => tab._id.toString());
       const res = await request(app)
         .post("/api/v1/tabs/bulk-delete")
         .send({ tabIds: createdTabIds })
