@@ -3,6 +3,11 @@ name: Lint
 on:
   push:
   pull_request:
+  
+permissions:
+  checks: write
+  contents: write
+  actions: write
 
 jobs:
   run-linters:
@@ -24,6 +29,7 @@ jobs:
       - name: Run linters
         uses: wearerequired/lint-action@v3
         with: 
+          auto_fix: true
           eslint: true
           prettier: true
-
+          
