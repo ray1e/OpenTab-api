@@ -10,7 +10,9 @@
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --detectOpenHandles",
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "coverage": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --detectOpenHandles --coverage"
+    "coverage": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --detectOpenHandles --coverage",
+    "lint": "npx eslint ./src",
+    "lint:fix": "npx eslint --fix ./src"
   },
   "jest": {
     "testEnvironment": "node",
