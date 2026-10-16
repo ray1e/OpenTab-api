@@ -13,7 +13,7 @@ const startServer = async () => {
         );
       });
     } else {
-      console.error(`Database connection failed ${error.message}`);
+      console.error(`Database connection failed`);
       process.exit(1);
     }
   } catch (error) {
