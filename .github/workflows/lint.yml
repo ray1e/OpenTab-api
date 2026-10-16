@@ -28,3 +28,6 @@ jobs:
 
       - name: ESLint
         run: npm run lint:fix
+
+      - name: Prettier
+        run: npm run prettier:fix
