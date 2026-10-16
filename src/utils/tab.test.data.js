@@ -78,5 +78,5 @@ export const reqCreateItems = {
       itemPrice: 2.5,
       itemQuantity: 2,
     },
-  ]
-}
+  ],
+};

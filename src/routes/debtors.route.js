@@ -9,10 +9,7 @@ import {
   getOneDebtProfile,
   getAllDebtProfiles,
 } from "../controllers/debtor.controller.js";
-import {
-  tabBodySchema,
-  tabParamsSchema,
-} from "../schemas/tab.schema.js";
+import { tabBodySchema, tabParamsSchema } from "../schemas/tab.schema.js";
 
 const debtorsRouter = Router();
 

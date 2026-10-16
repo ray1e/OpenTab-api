@@ -121,7 +121,7 @@ export const getAllDebtProfiles = async (query) => {
             },
           },
           // sort the debts in descending order starting with the debt with most recent added tab
-          { $sort: { latestTabDate: -1, _id: 1 } }, 
+          { $sort: { latestTabDate: -1, _id: 1 } },
           { $skip: (page - 1) * limit },
           { $limit: limit + 1 },
           {

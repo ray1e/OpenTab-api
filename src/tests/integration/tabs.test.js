@@ -142,7 +142,9 @@ describe("tab controller", () => {
         .send(reqAddTabs)
         .set("Content-Type", "application/json");
 
-      const createdTabIds = createdTabs.body.data.map((tab) => tab._id.toString());
+      const createdTabIds = createdTabs.body.data.map((tab) =>
+        tab._id.toString()
+      );
       const res = await request(app)
         .post("/api/v1/tabs/bulk-delete")
         .send({ tabIds: createdTabIds })
@@ -280,7 +282,7 @@ describe("tab controller", () => {
       const itemId =
         fullResponse.body.data.queryResults[0].tabs[0].items[0]._id;
       console.log(tabId);
-      console.log(itemId)
+      console.log(itemId);
       const res = await request(app).delete(
         `/api/v1/tabs/${tabId}/items/${itemId}`
       );

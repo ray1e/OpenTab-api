@@ -130,7 +130,7 @@ describe("debtor controller", () => {
         })
         .set("Content-Type", "application/json");
       const res = await request(app).get("/api/v1/debtors?include=tabs");
-      const debtProfiles = res.body.data.queryResults; 
+      const debtProfiles = res.body.data.queryResults;
       const dateTakenArray = debtProfiles.map((profile) => {
         // map inside a tab and return an array of dateTaken dates and returns max date
         const maxTabDatesArray = profile.tabs.map((tab) => {

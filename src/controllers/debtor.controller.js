@@ -37,11 +37,11 @@ export const getOneDebtProfile = async (req, res, next) => {
   }
 };
 
-
 export const getAllDebtProfiles = async (req, res, next) => {
   try {
     const query = res.locals.validatedQuery;
-    const {queryResults, hasNextPage} = await getAllDebtProfilesService(query);
+    const { queryResults, hasNextPage } =
+      await getAllDebtProfilesService(query);
     if (!queryResults) {
       const error = new Error("Debt profiles not found");
       error.statusCode = 404;
@@ -51,7 +51,7 @@ export const getAllDebtProfiles = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Debt profiles retrieved successfully",
-      data: {queryResults, hasNextPage}
+      data: { queryResults, hasNextPage },
     });
   } catch (error) {
     next(error);

@@ -10,7 +10,7 @@ setServers(["1.1.1.1", "8.8.8.8"]);
 
 const app = express();
 app.use(express.json());
-app.use(morgan("dev"))
+app.use(morgan("dev"));
 const BASE_ROUTE = "/api/v1";
 
 app.use(`${BASE_ROUTE}/debtors`, debtorsRouter);

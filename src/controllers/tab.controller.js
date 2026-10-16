@@ -96,7 +96,7 @@ export const addItems = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Items added successfully",
-      data: updatedTab ,
+      data: updatedTab,
     });
   } catch (error) {
     next(error);
