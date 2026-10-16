@@ -99,6 +99,7 @@ export const getAllDebtProfiles = async (query) => {
             $lookup: {
               from: "tabs",
               let: { debtorId: "$_id" },
+              // applies tabPaid filter
               pipeline: [
                 {
                   $match: {
@@ -107,6 +108,7 @@ export const getAllDebtProfiles = async (query) => {
                     },
                   },
                 },
+                // sort tabs starting with most recent tabs added
                 { $sort: { dateTaken: -1 } },
                 { $project: { __v: 0 } },
               ],
@@ -118,7 +120,8 @@ export const getAllDebtProfiles = async (query) => {
               latestTabDate: { $max: "$tabs.dateTaken" },
             },
           },
-          { $sort: { latestTabDate: -1, _id: 1 } },
+          // sort the debts in descending order starting with the debt with most recent added tab
+          { $sort: { latestTabDate: -1, _id: 1 } }, 
           { $skip: (page - 1) * limit },
           { $limit: limit + 1 },
           {

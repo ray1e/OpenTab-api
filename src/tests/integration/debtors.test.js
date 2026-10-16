@@ -84,6 +84,66 @@ describe("debtor controller", () => {
 
       expect(res.status).toBe(400);
     });
+
+    it("returns debts in descending order based on a debtor's most recently added tab", async () => {
+      await request(app)
+        .post("/api/v1/debtors")
+        .set("Connection", "close")
+        .send({
+          name: "Mark",
+          dateTaken: "2026-10-16T09:00:00.000Z",
+          items: [
+            {
+              itemName: "matchbox",
+              itemPrice: 3.5,
+              itemQuantity: 2,
+              itemActive: true,
+            },
+            {
+              itemName: "pencil",
+              itemPrice: 8,
+              itemQuantity: 1,
+            },
+          ],
+        })
+        .set("Content-Type", "application/json");
+
+      await request(app)
+        .post("/api/v1/debtors")
+        .set("Connection", "close")
+        .send({
+          name: "Luke",
+          dateTaken: "2026-08-16T09:00:00.000Z",
+          items: [
+            {
+              itemName: "watch",
+              itemPrice: 3.5,
+              itemQuantity: 2,
+              itemActive: true,
+            },
+            {
+              itemName: "cpu",
+              itemPrice: 8,
+              itemQuantity: 1,
+            },
+          ],
+        })
+        .set("Content-Type", "application/json");
+      const res = await request(app).get("/api/v1/debtors?include=tabs");
+      const debtProfiles = res.body.data.queryResults; 
+      const dateTakenArray = debtProfiles.map((profile) => {
+        // map inside a tab and return an array of dateTaken dates and returns max date
+        const maxTabDatesArray = profile.tabs.map((tab) => {
+          return Date.parse(tab.dateTaken);
+        });
+        return Math.max(...maxTabDatesArray);
+      });
+      const isDateSorted = dateTakenArray.every(
+        (date, index) => index === 0 || dateTakenArray[index - 1] >= date
+      );
+
+      expect(isDateSorted).toBeTruthy();
+    });
   });
 
   describe("get one debt profile", () => {
