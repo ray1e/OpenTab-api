@@ -8,7 +8,7 @@ export default defineConfig([
   {
     files: ["**/*.{js,mjs,cjs}"],
     plugins: { js, 'import-x': importX },
-    extends: ["js/recommended", "import-x/flat/recommend"],
+    extends: ["js/recommended", "import-x/flat/recommended"],
     languageOptions: { globals: globals.node },
   },
   eslintConfigPrettier,
