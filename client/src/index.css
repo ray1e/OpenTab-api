@@ -21,6 +21,7 @@ body {
 
   --color-surface-page: var(--surface-page);
   --color-surface-default: var(--surface-default);
+  --color-surface-default-hover: var(--surface-default-hover);
   --color-surface-primary-card: var(--surface-primary-card);
   --color-surface-action: var(--surface-action);
   --color-surface-on-action-subtle: var(--surface-on-action-subtle);
@@ -29,6 +30,7 @@ body {
   --color-surface-error: var(--surface-error);
   --color-surface-warning: var(--surface-warning);
   --color-surface-information: var(--surface-information);
+  --color-surface-secondary: var(--surface-secondary);
 
   --color-text-heading: var(--text-heading);
   --color-text-secondary: var(--text-secondary);
@@ -55,6 +57,8 @@ body {
   --color-border-warning: var(--border-warning);
   --color-border-information: var(--border-information);
   --color-border-divider: var(--border-divider);
+  --color-border-input-ring-focus: var(--border-input-ring-focus);
+  --color-border-input-ring-default: var(--border-input-ring-default);
 
   --color-icon-default: var(--icon-default);
   --color-icon-on-action: var(--icon-on-action);

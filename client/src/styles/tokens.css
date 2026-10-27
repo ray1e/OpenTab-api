@@ -195,7 +195,9 @@
 :root {
   --surface-page: var(--neutral-50);
   --surface-default: var(--neutral-50);
+  --surface-default-hover: var(--secondary-50);
   --surface-primary-card: var(--primary-500);
+  --surface-secondary: var(--neutral-200);
   --surface-action: var(--primary-500);
   --surface-on-action-subtle: #FFFFFF14;
   --surface-action-hover: var(--primary-400);
@@ -219,14 +221,18 @@
   --text-information: var(--accent-500);
   --text-disabled: var(--neutral-400);
   --text-warning: var(--warning-500);
+
   --border-default: var(--neutral-300);
   --border-action: var(--primary-500);
   --border-action-hover: var(--primary-600);
+  --border-input-ring-focus: var(--primary-200);
+  --border-input-ring-default: var(--neutral-400);
   --border-divider: var(--foundations-white);
   --border-sucess: var(--success-50);
   --border-error: var(--error-800);
   --border-warning: var(--warning-400---default);
   --border-information: var(--accent-500);
+
   --icon-default: #FFFFFFFF;
   --icon-on-action: #FFFFFFFF;
   --icon-on-action-hover: #FFFFFFFF;
