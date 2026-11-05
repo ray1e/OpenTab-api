@@ -22,7 +22,7 @@ function DebtorCard({ name, phone, amount, activeDebts }) {
               <span className="truncate text-paragraph-md-medium text-text-body">
                 {name}
               </span>
-              <span className="truncate text-paragraph-md text-text-subtle">
+              <span className="text-paragraph-md truncate text-text-subtle">
                 {phone}
               </span>
             </div>

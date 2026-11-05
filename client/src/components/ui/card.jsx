@@ -1,28 +1,21 @@
-import * as React from "react"
-import { cn } from "cn"
+import * as React from "react";
+import { cn } from "cn";
 
-function Card({
-  className,
-  size = "default",
-  ...props
-}) {
+function Card({ className, size = "default", ...props }) {
   return (
     <div
       data-slot="card"
       data-size={size}
       className={cn(
-        "group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card  text-sm text-card-foreground shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
+        "group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card text-sm text-card-foreground shadow-xs ring-1 ring-foreground/10 [--card-spacing:--spacing(6)] has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
         className
       )}
       {...props}
     />
-  )
+  );
 }
 
-function CardHeader({
-  className,
-  ...props
-}) {
+function CardHeader({ className, ...props }) {
   return (
     <div
       data-slot="card-header"
@@ -32,13 +25,10 @@ function CardHeader({
       )}
       {...props}
     />
-  )
+  );
 }
 
-function CardTitle({
-  className,
-  ...props
-}) {
+function CardTitle({ className, ...props }) {
   return (
     <div
       data-slot="card-title"
@@ -48,26 +38,20 @@ function CardTitle({
       )}
       {...props}
     />
-  )
+  );
 }
 
-function CardDescription({
-  className,
-  ...props
-}) {
+function CardDescription({ className, ...props }) {
   return (
     <div
       data-slot="card-description"
       className={cn("text-sm text-muted-foreground", className)}
       {...props}
     />
-  )
+  );
 }
 
-function CardAction({
-  className,
-  ...props
-}) {
+function CardAction({ className, ...props }) {
   return (
     <div
       data-slot="card-action"
@@ -77,26 +61,20 @@ function CardAction({
       )}
       {...props}
     />
-  )
+  );
 }
 
-function CardContent({
-  className,
-  ...props
-}) {
+function CardContent({ className, ...props }) {
   return (
     <div
       data-slot="card-content"
       className={cn("flex flex-col gap-3 px-(--card-spacing)", className)}
       {...props}
     />
-  )
+  );
 }
 
-function CardFooter({
-  className,
-  ...props
-}) {
+function CardFooter({ className, ...props }) {
   return (
     <div
       data-slot="card-footer"
@@ -106,7 +84,7 @@ function CardFooter({
       )}
       {...props}
     />
-  )
+  );
 }
 
 export {
@@ -117,4 +95,4 @@ export {
   CardAction,
   CardDescription,
   CardContent,
-}
+};
