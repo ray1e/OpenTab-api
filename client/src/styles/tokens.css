@@ -196,8 +196,9 @@
   --surface-page: var(--neutral-50);
   --surface-default: var(--neutral-50);
   --surface-default-hover: var(--secondary-50);
+  --surface-default-hover-button: var(--neutral-200);
   --surface-primary-card: var(--primary-500);
-  --surface-secondary: var(--neutral-200);
+  --surface-secondary: var(--neutral-500);
   --surface-action: var(--primary-500);
   --surface-on-action-subtle: #ffffff14;
   --surface-action-hover: var(--primary-400);
@@ -240,7 +241,7 @@
   --icon-on-action-hover: #ffffffff;
   --icon-placeholder: #ffffffff;
   --icon-action: var(--primary-500);
-  --icon-action-hover: #ffffffff;
+  --icon-action-hover: var(--primary-400);
   --icon-success: #ffffffff;
   --icon-error: #ffffffff;
   --icon-information: #ffffffff;

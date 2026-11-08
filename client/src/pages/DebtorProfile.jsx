@@ -12,7 +12,7 @@ function DebtorProfile() {
   return (
     <div className="w-full min-w-0 overflow-x-clip">
       <div className="pb-space-component-padding-md">
-        <TopNavigation buttonLabel="Add Debtor" />
+        <TopNavigation buttonLabel="Add Debt" />
       </div>
 
       {/*debtor statistics card*/}

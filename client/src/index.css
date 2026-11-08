@@ -26,6 +26,7 @@ body {
   --color-surface-page: var(--surface-page);
   --color-surface-default: var(--surface-default);
   --color-surface-default-hover: var(--surface-default-hover);
+  --color-surface-default-hover-button: var(--surface-default-hover-button);
   --color-surface-primary-card: var(--surface-primary-card);
   --color-surface-action: var(--surface-action);
   --color-surface-on-action-subtle: var(--surface-on-action-subtle);
