@@ -219,7 +219,7 @@
   --text-action: var(--secondary-500);
   --text-action-hover: #ffffffff;
   --text-success: #ffffffff;
-  --text-error: #ffffffff;
+  --text-error: var(--error-500);;
   --text-information: var(--accent-500);
   --text-disabled: var(--neutral-400);
   --text-warning: var(--warning-500);
@@ -232,7 +232,7 @@
   --border-divider-default: var(--neutral-700);
   --border-on-action-divider: var(--foundations-white);
   --border-sucess: var(--success-50);
-  --border-error: var(--error-800);
+  --border-error: var(--error-500);
   --border-warning: var(--warning-400---default);
   --border-information: var(--accent-500);
 

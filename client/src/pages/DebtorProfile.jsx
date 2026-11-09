@@ -7,13 +7,22 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ChevronDownIcon } from "lucide-react";
+import { useState } from "react";
+import AddDebt from "@/pages/AddDebt.jsx";
 
 function DebtorProfile() {
+  const [isAddDebtOpen, setIsAddDebtOpen] = useState(false);
+
   return (
     <div className="w-full min-w-0 overflow-x-clip">
       <div className="pb-space-component-padding-md">
-        <TopNavigation buttonLabel="Add Debt" />
+        <TopNavigation
+          buttonLabel="Add Debt"
+          onButtonClick={() => setIsAddDebtOpen(true)}
+        />
       </div>
+
+      {isAddDebtOpen && <AddDebt onClose={() => setIsAddDebtOpen(false)} />}
 
       {/*debtor statistics card*/}
       <div className="flex min-w-0 gap-4 px-space-component-padding-md pb-space-component-padding-md">

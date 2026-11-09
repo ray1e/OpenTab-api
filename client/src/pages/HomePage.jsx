@@ -3,6 +3,9 @@ import TopNavigation from "@/components/navigation/TopNavigation";
 import { Card, CardContent } from "@/components/ui/card";
 
 import { ArrowRight, TrendingDown, Users } from "lucide-react";
+import { useState } from "react";
+import AddDebtor from "@/pages/AddDebtor.jsx";
+import { Link } from "react-router-dom";
 
 const debtors = [
   {
@@ -22,11 +25,19 @@ const debtors = [
 ];
 
 function HomePage() {
+  const [isAddDebtorOpen, setIsAddDebtorOpen] = useState(false);
   return (
     <div className="w-full min-w-0 overflow-x-clip">
       <div className="pb-space-component-padding-md">
-        <TopNavigation buttonLabel="add Debtor" />
+        <TopNavigation
+          buttonLabel="add Debtor"
+          onButtonClick={() => setIsAddDebtorOpen(true)}
+        />
       </div>
+
+      {isAddDebtorOpen && (
+        <AddDebtor onClose={() => setIsAddDebtorOpen(false)} />
+      )}
 
       <div className="px-space-component-padding-md pb-space-component-padding-md max-[240px]:px-2">
         <Card className="flex w-full min-w-0 rounded-card-debts-summary bg-surface-primary-card p-space-component-padding-md max-[240px]:p-2">
@@ -83,18 +94,23 @@ function HomePage() {
 
       <div className="flex justify-between px-space-component-padding-md pb-space-component-padding-md max-[240px]:px-2">
         <span className="text-h6 text-text-body">Customers</span>
-        <div className="flex items-center justify-center gap-2">
-          <span className="text-paragraph-md-regular text-text-body">
-            See All
-          </span>
-          <ArrowRight className="h-4 w-4" />
-        </div>
+        <Link to="/debtor-profiles">
+          <div className="flex items-center justify-center gap-2">
+            <span className="text-paragraph-md-regular text-text-body">
+              See All
+            </span>
+
+            <ArrowRight className="h-4 w-4" />
+          </div>
+        </Link>
       </div>
 
       <div className="border-t border-t-border-default pb-space-component-padding-sm">
-        {debtors.map((debtor) => (
-          <DebtorCard key={debtor.id} {...debtor} />
-        ))}
+        <Link to="/debtor">
+          {debtors.map((debtor) => (
+            <DebtorCard key={debtor.id} {...debtor} />
+          ))}
+        </Link>
       </div>
     </div>
   );
