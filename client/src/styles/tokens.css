@@ -195,6 +195,7 @@
 :root {
   --surface-page: var(--neutral-50);
   --surface-default: var(--neutral-50);
+  --surface-none: var(--foundations-white);
   --surface-default-hover: var(--secondary-50);
   --surface-default-hover-button: var(--neutral-200);
   --surface-primary-card: var(--primary-500);

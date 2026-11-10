@@ -36,6 +36,9 @@ body {
   --color-surface-warning: var(--surface-warning);
   --color-surface-information: var(--surface-information);
   --color-surface-secondary: var(--surface-secondary);
+  --color-surface-none: var(--surface-none);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-200: var(--neutral-200);
 
   --color-text-heading: var(--text-heading);
   --color-text-secondary: var(--text-secondary);
