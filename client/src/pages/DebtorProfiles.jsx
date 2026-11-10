@@ -89,7 +89,13 @@ export function DebtorProfiles() {
       </div>
       <div className="border-t border-t-border-default pb-space-component-padding-sm">
         {debtors.map((debtor) => (
-          <DebtorCard key={debtor.id} {...debtor} />
+          <DebtorCard
+            key={debtor.id}
+            name={debtor.name}
+            phone={debtor.phone}
+            amount={debtor.amount}
+            activeDebts={debtor.activeDebts}
+          />
         ))}
       </div>
     </div>

@@ -6,26 +6,14 @@ import { ArrowRight, TrendingDown, Users } from "lucide-react";
 import { useState } from "react";
 import AddDebtor from "@/pages/AddDebtor.jsx";
 import { Link } from "react-router-dom";
-
-const debtors = [
-  {
-    id: 1,
-    name: "John Ngugi",
-    phone: "0797459821",
-    amount: "Ksh. 3, 500",
-    activeDebts: 3,
-  },
-  {
-    id: 2,
-    name: "John Ngugi",
-    phone: "0797459821",
-    amount: "Ksh. 3, 500",
-    activeDebts: 3,
-  },
-];
+//import { useSelector } from "react-redux";
+import { useGetDebtorsQuery } from "@/debtorApi.js";
 
 function HomePage() {
   const [isAddDebtorOpen, setIsAddDebtorOpen] = useState(false);
+  const { data: debtors = [], isLoading, isError } = useGetDebtorsQuery();
+
+  //const debtors = useSelector((state) => state.debts.debts);
   return (
     <div className="w-full min-w-0 overflow-x-clip">
       <div className="pb-space-component-padding-md">
@@ -106,11 +94,22 @@ function HomePage() {
       </div>
 
       <div className="border-t border-t-border-default pb-space-component-padding-sm">
-        <Link to="/debtor">
-          {debtors.map((debtor) => (
-            <DebtorCard key={debtor.id} {...debtor} />
-          ))}
-        </Link>
+        {isLoading ? (
+          <p>Loading debtors...</p>
+        ) : isError ? (
+          <p role="alert">Unable to load debtors.</p>
+        ) : (
+          debtors.map((debtor) => (
+            <Link key={debtor._id} to={`/debtor/${debtor._id}`}>
+              <DebtorCard
+                name={debtor.name}
+                phone={debtor.phone}
+                amount={debtor.amount}
+                activeDebts={debtor.tabs?.length ?? 0}
+              />
+            </Link>
+          ))
+        )}
       </div>
     </div>
   );

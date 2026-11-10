@@ -11,7 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/debtor-profiles" element={<DebtorProfiles />} />
-        <Route path="/debtor" element={<DebtorProfile />} />
+        <Route path="/debtor/:debtorId" element={<DebtorProfile />} />
         <Route path="/add-debt" element={<AddDebt/>} />
         <Route path="/add-debtor" element={<AddDebtor/>} />
       </Routes>
