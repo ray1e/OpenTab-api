@@ -18,10 +18,16 @@ function DebtorProfile() {
   const [isAddDebtOpen, setIsAddDebtOpen] = useState(false);
   const { data: debtors = [], isLoading, isError } = useGetDebtorsQuery();
   const { debtorId } = useParams();
+  const [selectedFilter, setSelectedFilter] = useState("All");
+
   const debtor = debtors.find((debtor) => debtor._id === debtorId);
   const tabs = debtor?.tabs ?? [];
   const activeTabCount = tabs.filter((tab) => !tab.tabPaid).length;
-
+  const currentTabs = tabs.filter((tab) => {
+    if (selectedFilter === "Active") return !tab.tabPaid;
+    if (selectedFilter === "Paid") return tab.tabPaid;
+    return true;
+  });
   return (
     <div className="w-full min-w-0 overflow-x-clip">
       <div className="pb-space-component-padding-md">
@@ -76,7 +82,7 @@ function DebtorProfile() {
       ) : tabs.length === 0 ? (
         <p>No debts yet.</p>
       ) : (
-        <Tabs defaultValue="overview" className="w-full">
+        <Tabs defaultValue="All" value={selectedFilter} onValueChange={setSelectedFilter} className="w-full">
           <TabsList className="w-1/2 gap-2 self-center bg-surface-default">
             <TabsTrigger
               className="cursor-pointer rounded-full not-data-active:hover:bg-surface-default-hover data-active:bg-surface-primary-card data-active:text-text-on-action data-active:hover:text-text-on-action-hover"
@@ -97,13 +103,17 @@ function DebtorProfile() {
               Paid
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="All">
+          <TabsContent value={selectedFilter} className="flex flex-col">
+            <p className="text-sm-md-regular pr-space-component-padding-md pb-space-component-padding-sm pl-8 text-text-subtle italic">
+              Showing <span className="text-text-body">{currentTabs.length}</span>{" "}
+              {currentTabs.length === 1 ? "record" : "records"}
+            </p>
             {/*has all cards */}
-            <div className="flex flex-col border-t border-border-default pb-space-component-padding-sm">
-              {tabs.map((tab) => (
+            <div className="flex flex-col divide-y divide-border-default pb-space-component-padding-sm">
+              {currentTabs.map((tab) => (
                 <Card
                   key={tab._id}
-                  className="cursor-pointer rounded-none border-b border-b-border-default bg-transparent shadow-none ring-0 hover:bg-surface-default-hover"
+                  className="cursor-pointer rounded-none  bg-transparent shadow-none ring-0 hover:bg-surface-default-hover"
                 >
                   <CardContent className="px-space-component-padding-sm py-space-component-padding-sm">
                     <Collapsible>
