@@ -122,8 +122,8 @@ export const getAllDebtProfiles = async (query) => {
           },
           // sort the debts in descending order starting with the debt with most recent added tab
           { $sort: { latestTabDate: -1, _id: 1 } },
-          //facer executes parallel pipelines, in this case it 
-          //counts documents while 
+          //facet executes parallel pipelines, in this case it 
+          //counts documents while doing pagination
           {
             $facet: {
               metadata: [{ $count: "totalDocuments" }],
