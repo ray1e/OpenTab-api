@@ -1,22 +1,30 @@
-import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react"
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const debtorApi = createApi({
-    reducerPath: "debtorApi",
-    baseQuery: fetchBaseQuery({
-        baseUrl: "http://localhost:5000/api/v1/debtors"
+  reducerPath: "debtorApi",
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:5000/api/v1/debtors",
+  }),
+  endpoints: (build) => ({
+    getDebtors: build.query({
+      query: () => ({ url: "?include=tabs" }),
+      transformResponse: (response) => response.data,
+      //tag the whole list and individual items
+      providesTags: (result) => [
+        { type: "debtors", id: "LIST" },
+        ...result.debtorProfiles.map(({ _id }) => ({ type: "debtors", id: _id })),
+      ],
     }),
-    endpoints: (build) => ({
-        getDebtors: build.query({
-            query: () => ({url: "?include=tabs"}),
-            transformResponse: (response) => response.data.queryResults,
-            //tag the whole list and individual items
-            providesTags: (result) => [
-                {type: "debtors", id: "LIST"},
-                ...result.map(({_id}) => ({type: "debtors", id: _id}))
-            ]
-        })
+    getAllDebtorsList: build.query({
+      query: (pageNumber) => ({ url: `?includes-tabs&page=${pageNumber}` }),
+      transformResponse: (response) => response.data,
+      //tag the whole list and individual items
+      providesTags: (result) => [
+        { type: "debtors", id: "LIST" },
+        ...result.debtorProfiles.map(({ _id }) => ({ type: "debtors", id: _id })),
+      ],
+    }),
+  }),
+});
 
-    })
-})
-
-export const {useGetDebtorsQuery} = debtorApi;
+export const { useGetDebtorsQuery, useGetAllDebtorsListQuery } = debtorApi;
