@@ -13,7 +13,7 @@
     "coverage": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --detectOpenHandles --coverage",
     "lint": "npx eslint ./src",
     "lint:fix": "npx eslint --fix ./src",
-    "prettier:fix":"npx prettier --write ./src"
+    "prettier:fix": "npx prettier --write ./src"
   },
   "jest": {
     "testEnvironment": "node",
@@ -25,6 +25,7 @@
     ]
   },
   "dependencies": {
+    "cors": "^2.8.6",
     "dotenv": "^18.0.5",
     "express": "^5.2.1",
     "mongoose": "^9.10.4",

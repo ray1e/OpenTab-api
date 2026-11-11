@@ -122,22 +122,32 @@ export const getAllDebtProfiles = async (query) => {
           },
           // sort the debts in descending order starting with the debt with most recent added tab
           { $sort: { latestTabDate: -1, _id: 1 } },
-          { $skip: (page - 1) * limit },
-          { $limit: limit + 1 },
+          //facer executes parallel pipelines, in this case it 
+          //counts documents while 
           {
-            $project: {
-              __v: 0,
-              "tabs.__v": 0,
-              latestTabDate: 0,
+            $facet: {
+              metadata: [{ $count: "totalDocuments" }],
+              data: [
+                { $skip: (page - 1) * limit },
+                { $limit: limit },
+                {
+                  $project: {
+                    __v: 0,
+                    "tabs.__v": 0,
+                    latestTabDate: 0,
+                  },
+                },
+              ],
             },
           },
         ])
       : allDebtors;
-  let hasNextPage = false;
-  if (queryResults.length > limit) {
-    hasNextPage = true;
-    queryResults.pop();
-  }
 
-  return { queryResults, hasNextPage };
+  const totalDocuments = queryResults[0]?.metadata[0]?.totalDocuments || 0;
+  const availablePages = Math.ceil(totalDocuments / limit);
+  const debtorProfiles = queryResults[0]?.data || [];
+
+  const hasNextPage = availablePages > page;
+
+  return { debtorProfiles, hasNextPage, availablePages };
 };
