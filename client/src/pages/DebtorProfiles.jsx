@@ -14,18 +14,50 @@ import { Button } from "@/components/ui/button.jsx";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { useGetDebtorsQuery } from "@/debtorApi.js";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import AddDebtor from "./AddDebtor.jsx";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export function DebtorProfiles() {
+  const [isAddDebtorOpen, setIsAddDebtorOpen] = useState(false);
   const [sortMethod, setSortMethod] = useState("comfortable");
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
-  const { data: debtors = [], isLoading, isError } = useGetDebtorsQuery();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  //get the page for the first render from the url otherwise use 1
+  const page = Number(searchParams.get("page") || 1);
+  const { data, isLoading, isError } = useGetDebtorsQuery(page);
+
+  //use setSearchParams to set the new url path with the include and
+  //page keys
+  // also page here is what will be visible to the user in the urlpath
+  const goToPage = (nextPage) =>
+    setSearchParams({
+      include: "tabs",
+      page: String(nextPage),
+    });
+
+  const debtors = data?.debtorProfiles ?? [];
 
   return (
-    <div className="w-full min-w-0 overflow-x-clip pt-20">
-      <div className="fixed top-0 left-0 right-0 z-50 bg-surface-default">
+    <div className="w-full min-w-0 overflow-x-clip pt-24">
+      {isAddDebtorOpen && (
+        <AddDebtor onClose={() => setIsAddDebtorOpen(false)} />
+      )}
+      <div className="fixed top-0 right-0 left-0 z-50 bg-surface-default">
         <div className="py-space-component-padding-md">
-          <TopNavigation buttonLabel="Add Debtor" />
+          <TopNavigation
+            buttonLabel="Add Debtor"
+            onButtonClick={() => setIsAddDebtorOpen(true)}
+          />
         </div>
         <div className="flex min-w-0 gap-4 px-space-component-padding-md pb-space-component-padding-md">
           <div className="relative w-1/2 max-w-md">
@@ -77,15 +109,44 @@ export function DebtorProfiles() {
         </div>
       </div>
 
-      <div className="divide divide-border-default pb-space-component-padding-sm">
-        {debtors.map((debtor) => (
-          <Link key={debtor._id} to={`/debtor/${debtor._id}`}>
-            <DebtorCard
-              name={debtor.name}
-              activeDebts={debtor.tabs?.length ?? 0}
-            />
-          </Link>
-        ))}
+      <div className="flex flex-col pb-space-component-padding-md">
+        <div className="divide divide-border-default pb-space-component-padding-sm">
+          {debtors.map((debtor) => (
+            <Link key={debtor._id} to={`/debtor/${debtor._id}`}>
+              <DebtorCard
+                name={debtor.name}
+                activeDebts={debtor.tabs?.length ?? 0}
+              />
+            </Link>
+          ))}
+        </div>
+        {/*pagination */}
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious href="#" />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                href={`?include=tabs&page=${page}`}
+                isActive={page}
+                onClick={(event) => {
+                  event.preventDefault();
+                  goToPage(page);
+                }}
+                className="not-data-active:hover:border not-data-active:hover:border-border-default data-active:size-6 data-active:rounded-md data-active:border-surface-primary-card"
+              >
+                {page}
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext href="#" />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
   );
