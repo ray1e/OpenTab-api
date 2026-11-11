@@ -25,9 +25,11 @@ import { ReceiptText, FileSpreadsheet } from "lucide-react";
 
 function DebtorProfile() {
   const [isAddDebtOpen, setIsAddDebtOpen] = useState(false);
-  const { data: debtors = [], isLoading, isError } = useGetDebtorsQuery();
+  const { data = [], isLoading, isError } = useGetDebtorsQuery();
   const { debtorId } = useParams();
   const [selectedFilter, setSelectedFilter] = useState("All");
+
+  const debtors = data.debtorProfiles ?? [];
 
   const debtor = debtors.find((debtor) => debtor._id === debtorId);
   const tabs = debtor?.tabs ?? [];
