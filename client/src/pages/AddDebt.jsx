@@ -87,7 +87,7 @@ function AddDebt({ onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-secondary/10 backdrop-blur-xs">
-      <Card className="flex w-1/2 flex-col bg-surface-default justify-center overflow-auto border-border-default px-space-component-padding-sm py-space-component-padding-md shadow-md ring-0 max-sm:w-3/4">
+      <Card className="flex w-1/2 flex-col bg-surface-default justify-center overflow-auto border-border-default px-space-component-padding-sm py-space-component-padding-md drop-shadow-xl/50 ring-0 max-sm:w-3/4">
         <CardHeader className="min-w-64 whitespace-nowrap">
           <CardTitle>Add debt</CardTitle>
           <CardDescription>Add new debt for John Ngugi</CardDescription>
