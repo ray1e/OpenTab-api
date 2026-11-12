@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button.jsx";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { useGetDebtorsQuery } from "@/debtorApi.js";
+import { useGetAllDebtorsListQuery } from "@/debtorApi.js";
 import { Link, useSearchParams } from "react-router-dom";
 import AddDebtor from "./AddDebtor.jsx";
 import {
@@ -25,6 +25,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { paginate } from "@/utils/pagination.js";
 
 export function DebtorProfiles() {
   const [isAddDebtorOpen, setIsAddDebtorOpen] = useState(false);
@@ -34,7 +35,7 @@ export function DebtorProfiles() {
   const [searchParams, setSearchParams] = useSearchParams();
   //get the page for the first render from the url otherwise use 1
   const page = Number(searchParams.get("page") || 1);
-  const { data, isLoading, isError } = useGetDebtorsQuery(page);
+  const { data = [], isLoading, isError } = useGetAllDebtorsListQuery(page);
 
   //use setSearchParams to set the new url path with the include and
   //page keys
@@ -46,6 +47,9 @@ export function DebtorProfiles() {
     });
 
   const debtors = data?.debtorProfiles ?? [];
+
+  const availablePages = data?.pagination?.availablePages || 1;
+  const { startPage, visibleCount } = paginate(3, page, availablePages);
 
   return (
     <div className="w-full min-w-0 overflow-x-clip pt-24">
@@ -121,32 +125,60 @@ export function DebtorProfiles() {
           ))}
         </div>
         {/*pagination */}
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious href="#" />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                href={`?include=tabs&page=${page}`}
-                isActive={page}
-                onClick={(event) => {
-                  event.preventDefault();
-                  goToPage(page);
-                }}
-                className="not-data-active:hover:border not-data-active:hover:border-border-default data-active:size-6 data-active:rounded-md data-active:border-surface-primary-card"
-              >
-                {page}
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext href="#" />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        {availablePages > 1 && (
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href={`?include=tabs&page=${Math.max(1, page - 1)}`}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    if (page > 1) {
+                      goToPage(page - 1);
+                    }
+                  }}
+                />
+              </PaginationItem>
+              {Array.from({ length: visibleCount }, (_, index) => {
+                // we already know the startpage so a page number is going to be
+                //how far it is from the start page example: if page is 5
+                //the start page is 4 and since the buttons are shown in groups of 3 like 4,5,6
+                // the page number is the start page plus index(how far it is from the start page)
+                const pageNumber = startPage + index;
+                return (
+                  <PaginationItem key={pageNumber}>
+                    <PaginationLink
+                      href={`?include=tabs&page=${pageNumber}`}
+                      isActive={page === pageNumber}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        goToPage(pageNumber);
+                      }}
+                      className="not-data-active:size-6 not-data-active:hover:rounded-md not-data-active:hover:border not-data-active:hover:border-border-default data-active:size-6 data-active:rounded-md data-active:border-surface-primary-card"
+                    >
+                      {pageNumber}
+                    </PaginationLink>
+                  </PaginationItem>
+                );
+              })}
+
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext
+                  href={`?include=tabs&page=${Math.min(availablePages, page + 1)}`}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    if (page < availablePages) {
+                      goToPage(page + 1);
+                    }
+                  }}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
       </div>
     </div>
   );

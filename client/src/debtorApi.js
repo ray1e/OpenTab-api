@@ -16,7 +16,7 @@ export const debtorApi = createApi({
       ],
     }),
     getAllDebtorsList: build.query({
-      query: (pageNumber) => ({ url: `?includes-tabs&page=${pageNumber}` }),
+      query: (pageNumber) => ({ url: `?include=tabs&page=${pageNumber}` }),
       transformResponse: (response) => response.data,
       //tag the whole list and individual items
       providesTags: (result) => [
