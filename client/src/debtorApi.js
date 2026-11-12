@@ -24,7 +24,12 @@ export const debtorApi = createApi({
         ...result.debtorProfiles.map(({ _id }) => ({ type: "debtors", id: _id })),
       ],
     }),
+    getDebtorProfile: build.query({
+      query: (debtorId) => ({ url:`/${debtorId}/debt-profile` }),
+      transformResponse: (response) => response.data,
+      providesTags: (result, error, debtorId) => [{ type: "debtors", id: debtorId }],
+    })
   }),
 });
 
-export const { useGetDebtorsQuery, useGetAllDebtorsListQuery } = debtorApi;
+export const { useGetDebtorsQuery, useGetAllDebtorsListQuery, useGetDebtorProfileQuery } = debtorApi;
