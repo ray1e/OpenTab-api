@@ -8,6 +8,7 @@ import AddDebtor from "@/pages/AddDebtor.jsx";
 import { Link } from "react-router-dom";
 //import { useSelector } from "react-redux";
 import { useGetDebtorsQuery } from "@/debtorApi.js";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function HomePage() {
   const [isAddDebtorOpen, setIsAddDebtorOpen] = useState(false);
@@ -95,24 +96,59 @@ function HomePage() {
         </div>
       </div>
 
-      <div className="divide divide-border-default pb-space-component-padding-sm">
-        {isLoading ? (
-          <p>Loading debtors...</p>
-        ) : isError ? (
-          <p role="alert">Unable to load debtors.</p>
-        ) : (
-          debtors.map((debtor) => (
-            <Link key={debtor._id} to={`/debtor/${debtor._id}`}>
-              <DebtorCard
-                name={debtor.name}
-                phone={debtor.phone}
-                amount={debtor.amount}
-                activeDebts={debtor.tabs?.length ?? 0}
-              />
-            </Link>
-          ))
-        )}
-      </div>
+      {isLoading ? (
+        <div
+          className="divide divide-border-default pb-space-component-padding-sm"
+          role="status"
+          aria-label="Loading customers"
+        >
+          {Array.from({ length: 5 }, (_, index) => (
+            <Card
+              key={index}
+              aria-hidden="true"
+              className="rounded-none border-b border-border-default bg-transparent py-space-component-padding-sm shadow-none ring-0"
+            >
+              <CardContent className="p-0">
+                <div className="flex items-center justify-between px-space-component-padding-sm max-[240px]:flex-col max-[240px]:items-stretch max-[240px]:gap-1 max-[240px]:px-2">
+                  <div className="flex min-w-0 items-center gap-2 p-space-component-padding-sm max-[240px]:p-0">
+                    <Skeleton className="size-10 shrink-0 rounded-full bg-neutral-200 max-[240px]:size-8" />
+                    <div className="flex min-w-0 flex-col gap-2">
+                      <Skeleton
+                        className={`h-4 bg-neutral-200 ${
+                          index % 2 === 0 ? "w-36" : "w-28"
+                        }`}
+                      />
+                      <Skeleton className="h-3 w-24 bg-neutral-200" />
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end gap-2 max-[240px]:flex-row max-[240px]:justify-between">
+                    <Skeleton className="h-4 w-16 bg-neutral-200" />
+                    <Skeleton className="h-3 w-20 bg-neutral-200" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+          <span className="sr-only">Loading customers...</span>
+        </div>
+      ) : (
+        <div className="divide divide-border-default pb-space-component-padding-sm">
+          {isError ? (
+            <p role="alert">Unable to load debtors.</p>
+          ) : (
+            debtors.map((debtor) => (
+              <Link key={debtor._id} to={`/debtor/${debtor._id}`}>
+                <DebtorCard
+                  name={debtor.name}
+                  phone={debtor.phone}
+                  amount={debtor.amount}
+                  activeDebts={debtor.tabs?.length ?? 0}
+                />
+              </Link>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 }

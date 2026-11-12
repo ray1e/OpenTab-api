@@ -22,6 +22,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { ReceiptText, FileSpreadsheet } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function DebtorProfile() {
   const [isAddDebtOpen, setIsAddDebtOpen] = useState(false);
@@ -88,7 +89,38 @@ function DebtorProfile() {
       </div>
 
       {isLoading ? (
-        <p>Loading...</p>
+        <div
+          className="flex flex-col divide-y divide-border-default pb-space-component-padding-sm"
+          role="status"
+          aria-label="Loading debts"
+        >
+          {Array.from({ length: 4 }, (_, index) => (
+            <Card
+              key={index}
+              aria-hidden="true"
+              className="rounded-none bg-transparent shadow-none ring-0"
+            >
+              <CardContent className="px-space-component-padding-sm py-space-component-padding-sm">
+                <div className="flex flex-col gap-2 py-space-component-padding-sm">
+                  <Skeleton
+                    className={`h-5 bg-neutral-200 ${
+                      index % 2 === 0 ? "w-24" : "w-32"
+                    }`}
+                  />
+                  <div className="flex items-center gap-space-component-padding-sm">
+                    <Skeleton className="h-4 w-12 bg-neutral-200" />
+                    <span
+                      className="h-1 w-1 rounded-full bg-border-default"
+                      aria-hidden="true"
+                    />
+                    <Skeleton className="h-4 w-20 bg-neutral-200" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+          <span className="sr-only">Loading debts...</span>
+        </div>
       ) : isError ? (
         <p>Something went wrong</p>
       ) : !debtorInfo ? (
