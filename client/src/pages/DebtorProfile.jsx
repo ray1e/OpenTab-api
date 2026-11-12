@@ -7,7 +7,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGetDebtorsQuery } from "@/debtorApi.js";
+import { useGetDebtorProfileQuery } from "@/debtorApi.js";
 import AddDebt from "@/pages/AddDebt.jsx";
 import { formatDate } from "@/utils/dateFormatter.js";
 import { ChevronDownIcon } from "lucide-react";
@@ -25,16 +25,19 @@ import { ReceiptText, FileSpreadsheet } from "lucide-react";
 
 function DebtorProfile() {
   const [isAddDebtOpen, setIsAddDebtOpen] = useState(false);
-  const { data = [], isLoading, isError } = useGetDebtorsQuery();
   const { debtorId } = useParams();
+  const { data = [], isLoading, isError } = useGetDebtorProfileQuery(debtorId);
+
   const [selectedFilter, setSelectedFilter] = useState("All");
 
-  const debtors = data.debtorProfiles ?? [];
+  const debtorInfo = data?.debtorProfile ?? [];
+  const debtorTabs = data?.tabs ?? [];
 
-  const debtor = debtors.find((debtor) => debtor._id === debtorId);
-  const tabs = debtor?.tabs ?? [];
-  const activeTabCount = tabs.filter((tab) => !tab.tabPaid).length;
-  const currentTabs = tabs.filter((tab) => {
+  //count tabs that are not paid
+  const activeTabCount = debtorTabs.filter((tab) => !tab.tabPaid).length;
+
+  //group separately unpaid and paid tabs
+  const currentTabs = debtorTabs.filter((tab) => {
     if (selectedFilter === "Active") return !tab.tabPaid;
     if (selectedFilter === "Paid") return tab.tabPaid;
     return true;
@@ -57,7 +60,7 @@ function DebtorProfile() {
             {/*name and phone */}
             <div className="flex flex-col items-start space-y-1 whitespace-nowrap">
               <span className="text-paragraph-lg-bold text-text-on-action">
-                {debtor?.name ??
+                {debtorInfo?.name ??
                   (isLoading ? "Loading..." : "Debtor not found")}
               </span>
               {/* <span className="text-text-on-action-subtle">0797459821</span> */}
@@ -88,9 +91,9 @@ function DebtorProfile() {
         <p>Loading...</p>
       ) : isError ? (
         <p>Something went wrong</p>
-      ) : !debtor ? (
+      ) : !debtorInfo ? (
         <p>Debtor not found.</p>
-      ) : tabs.length === 0 ? (
+      ) : debtorTabs.length === 0 ? (
         <Empty>
           <EmptyHeader>
             <EmptyMedia variant="icon">
@@ -118,25 +121,22 @@ function DebtorProfile() {
           onValueChange={setSelectedFilter}
           className="w-full rounded-card-debtor bg-surface-default"
         >
-          <TabsList
-            className="w-1/2 gap-2 self-center rounded-full px-2 text-text-secondary bg-neutral-100"
-            
-          >
+          <TabsList className="w-1/2 gap-2 self-center rounded-full bg-neutral-100 px-2 text-text-secondary">
             <TabsTrigger
-              className="cursor-pointer rounded-full  text-text-secondary not-data-active:hover:bg-surface-default-hover not-data-active:hover:text-text-body data-active:bg-surface-primary-card data-active:text-text-on-action data-active:hover:text-text-on-action-hover"
+              className="cursor-pointer rounded-full text-text-secondary not-data-active:hover:bg-surface-default-hover not-data-active:hover:text-text-body data-active:bg-surface-primary-card data-active:text-text-on-action data-active:hover:text-text-on-action-hover"
               value="All"
             >
               All
             </TabsTrigger>
             <TabsTrigger
               value="Active"
-              className="cursor-pointer rounded-full  text-text-secondary not-data-active:hover:bg-surface-default-hover not-data-active:hover:text-text-body data-active:bg-surface-primary-card data-active:text-text-on-action data-active:hover:text-text-on-action-hover"
+              className="cursor-pointer rounded-full text-text-secondary not-data-active:hover:bg-surface-default-hover not-data-active:hover:text-text-body data-active:bg-surface-primary-card data-active:text-text-on-action data-active:hover:text-text-on-action-hover"
             >
               Active
             </TabsTrigger>
             <TabsTrigger
               value="Paid"
-              className="cursor-pointer rounded-full  text-text-secondary not-data-active:hover:bg-surface-default-hover not-data-active:hover:text-text-body data-active:bg-surface-primary-card data-active:text-text-on-action data-active:hover:text-text-on-action-hover"
+              className="cursor-pointer rounded-full text-text-secondary not-data-active:hover:bg-surface-default-hover not-data-active:hover:text-text-body data-active:bg-surface-primary-card data-active:text-text-on-action data-active:hover:text-text-on-action-hover"
             >
               Paid
             </TabsTrigger>
@@ -156,13 +156,15 @@ function DebtorProfile() {
                   </EmptyDescription>
                 </EmptyHeader>
                 <EmptyContent className="flex-row justify-center gap-2">
-                  {selectedFilter === "Active" && <Button
-                    variant="default"
+                  {selectedFilter === "Active" && (
+                    <Button
+                      variant="default"
 
-                    className="cursor-pointer rounded-card-debtor bg-surface-action px-space-component-padding-md text-text-on-action hover:bg-surface-action-hover has-data-[icon=inline-start]:pl-space-component-padding-md max-[240px]:px-2 max-[240px]:has-data-[icon=inline-start]:pl-2"
-                  >
-                    Add Debt
-                  </Button>}
+                      className="cursor-pointer rounded-card-debtor bg-surface-action px-space-component-padding-md text-text-on-action hover:bg-surface-action-hover has-data-[icon=inline-start]:pl-space-component-padding-md max-[240px]:px-2 max-[240px]:has-data-[icon=inline-start]:pl-2"
+                    >
+                      Add Debt
+                    </Button>
+                  )}
                 </EmptyContent>
               </Empty>
             ) : (
