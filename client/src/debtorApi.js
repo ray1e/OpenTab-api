@@ -6,8 +6,9 @@ export const debtorApi = createApi({
     baseUrl: "http://localhost:5000/api/v1/debtors",
   }),
   endpoints: (build) => ({
+    //get only debtors to be displayed on the home page
     getDebtors: build.query({
-      query: () => ({ url: "?include=tabs" }),
+      query: () => ({ url: "?include=tabs&limit=5" }),
       transformResponse: (response) => response.data,
       //tag the whole list and individual items
       providesTags: (result) => [
