@@ -54,7 +54,7 @@ function AddDebtor({ onClose }) {
   });
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-secondary/10 backdrop-blur-xs">
+    <div className="fixed inset-0 z-100 flex items-center justify-center bg-surface-secondary/10 backdrop-blur-xs">
       <Card className="flex w-1/2 flex-col bg-surface-default justify-center overflow-auto border-border-default px-space-component-padding-sm py-space-component-padding-md drop-shadow-xl/50 ring-0 max-sm:w-3/4">
         <CardHeader className="min-w-64 whitespace-nowrap">
           <CardTitle>Add debtor</CardTitle>

@@ -21,7 +21,7 @@ function HomePage() {
       {isAddDebtorOpen && (
         <AddDebtor onClose={() => setIsAddDebtorOpen(false)} />
       )}
-      <div className="fixed top-0 right-0 left-0 z-50 bg-surface-default">
+      <div className="fixed top-0 right-0 left-0 z-50 bg-surface-default ">
         <div className="py-space-component-padding-md">
           <TopNavigation
             buttonLabel="add Debtor"
