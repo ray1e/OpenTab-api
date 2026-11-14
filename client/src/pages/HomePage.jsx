@@ -15,6 +15,7 @@ function HomePage() {
   const { data = [], isLoading, isError } = useGetDebtorsQuery();
 
   const debtors = data?.debtorProfiles ?? [];
+  const totalDebtorCount = data?.debtorCount ?? 0;
 
   return (
     <div className="w-full min-w-0 overflow-x-clip pt-52">
@@ -69,7 +70,7 @@ function HomePage() {
                       Customers
                     </span>
                     <span className="text-paragraph-lg-bold text-text-on-action">
-                      11
+                      {totalDebtorCount}
                     </span>
                   </div>
                 </div>
