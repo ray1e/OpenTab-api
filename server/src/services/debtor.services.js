@@ -123,7 +123,7 @@ export const getAllDebtProfiles = async (query) => {
           // sort the debts in descending order starting with the debt with most recent added tab
           { $sort: { latestTabDate: -1, _id: 1 } },
           //facet executes parallel pipelines, in this case it 
-          //counts documents while doing pagination
+          //counts documents while doing pagination at the same time
           {
             $facet: {
               metadata: [{ $count: "totalDocuments" }],
@@ -149,5 +149,5 @@ export const getAllDebtProfiles = async (query) => {
 
   const hasNextPage = availablePages > page;
 
-  return { debtorProfiles, hasNextPage, availablePages };
+  return { debtorProfiles, hasNextPage, totalDocuments, availablePages };
 };

@@ -40,7 +40,7 @@ export const getOneDebtProfile = async (req, res, next) => {
 export const getAllDebtProfiles = async (req, res, next) => {
   try {
     const query = res.locals.validatedQuery;
-    const { debtorProfiles, hasNextPage, availablePages } =
+    const { debtorProfiles, hasNextPage, availablePages, totalDocuments } =
       await getAllDebtProfilesService(query);
     if (!debtorProfiles) {
       const error = new Error("Debt profiles not found");
@@ -51,7 +51,7 @@ export const getAllDebtProfiles = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Debt profiles retrieved successfully",
-      data: { debtorProfiles, pagination: { hasNextPage, availablePages } },
+      data: { debtorCount: totalDocuments ,debtorProfiles, pagination: { hasNextPage, availablePages } },
     });
   } catch (error) {
     next(error);
