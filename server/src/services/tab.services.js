@@ -255,3 +255,8 @@ export const updateItem = async (tabId, itemId, body) => {
   error.statusCode = 404;
   throw error;
 };
+
+export const countActiveTabs = async () => {
+  const activeTabsCount = await Tab.countDocuments({ tabPaid: false });
+  return activeTabsCount;
+}

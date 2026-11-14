@@ -11,6 +11,7 @@ import {
   payItems,
   unpayItems,
   updateItem,
+  countActiveTabs
 } from "../controllers/tab.controller.js";
 import { validate } from "../middlewares/validation.middleware.js";
 import {
@@ -99,5 +100,7 @@ tabsRouter.patch(
   validate({ params: tabItemParamsSchema, body: updateItemsBodyschema }),
   updateItem
 );
+
+tabsRouter.get("/unpaid-debts", countActiveTabs)
 
 export default tabsRouter;

@@ -10,6 +10,7 @@ import {
   payItems as payItemsService,
   unpayItems as unpayItemsService,
   updateItem as updateItemService,
+  countActiveTabs as countActiveTabsService,
 } from "../services/tab.services.js";
 
 export const addNewTab = async (req, res, next) => {
@@ -172,6 +173,19 @@ export const updateItem = async (req, res, next) => {
       success: true,
       message: "Item updated successfully",
       data: updatedItem,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const countActiveTabs = async (req, res, next) => {
+  try {
+    const activeTabsCount = await countActiveTabsService();
+    res.status(200).json({
+      success: true,
+      message: "Active tabs counted successfully",
+      data: { activeTabsCount },
     });
   } catch (error) {
     next(error);
