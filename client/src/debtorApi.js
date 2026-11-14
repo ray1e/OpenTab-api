@@ -13,7 +13,10 @@ export const debtorApi = createApi({
       //tag the whole list and individual items
       providesTags: (result) => [
         { type: "debtors", id: "LIST" },
-        ...result.debtorProfiles.map(({ _id }) => ({ type: "debtors", id: _id })),
+        ...result.debtorProfiles.map(({ _id }) => ({
+          type: "debtors",
+          id: _id,
+        })),
       ],
     }),
     getAllDebtorsList: build.query({
@@ -22,15 +25,24 @@ export const debtorApi = createApi({
       //tag the whole list and individual items
       providesTags: (result) => [
         { type: "debtors", id: "LIST" },
-        ...result.debtorProfiles.map(({ _id }) => ({ type: "debtors", id: _id })),
+        ...result.debtorProfiles.map(({ _id }) => ({
+          type: "debtors",
+          id: _id,
+        })),
       ],
     }),
     getDebtorProfile: build.query({
-      query: (debtorId) => ({ url:`/${debtorId}/debt-profile` }),
+      query: (debtorId) => ({ url: `/${debtorId}/debt-profile` }),
       transformResponse: (response) => response.data,
-      providesTags: (result, error, debtorId) => [{ type: "debtors", id: debtorId }],
-    })
+      providesTags: (result, error, debtorId) => [
+        { type: "debtors", id: debtorId },
+      ],
+    }),
   }),
 });
 
-export const { useGetDebtorsQuery, useGetAllDebtorsListQuery, useGetDebtorProfileQuery } = debtorApi;
+export const {
+  useGetDebtorsQuery,
+  useGetAllDebtorsListQuery,
+  useGetDebtorProfileQuery,
+} = debtorApi;

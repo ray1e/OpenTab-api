@@ -2,27 +2,30 @@ import DebtorCard from "@/components/debtors/DebtorCard";
 import TopNavigation from "@/components/navigation/TopNavigation";
 import { Card, CardContent } from "@/components/ui/card";
 
+import AddDebtor from "@/pages/AddDebtor.jsx";
 import { ArrowRight, TrendingDown, Users } from "lucide-react";
 import { useState } from "react";
-import AddDebtor from "@/pages/AddDebtor.jsx";
 import { Link } from "react-router-dom";
 //import { useSelector } from "react-redux";
-import { useGetDebtorsQuery } from "@/debtorApi.js";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useGetDebtorsQuery } from "@/debtorApi.js";
+import { useGetActiveTabsCountQuery } from "@/tabApi.js";
 
 function HomePage() {
   const [isAddDebtorOpen, setIsAddDebtorOpen] = useState(false);
   const { data = [], isLoading, isError } = useGetDebtorsQuery();
+  const { data: response } = useGetActiveTabsCountQuery();
 
   const debtors = data?.debtorProfiles ?? [];
   const totalDebtorCount = data?.debtorCount ?? 0;
+  const activeTabsCount = response?.activeTabsCount ?? 0;
 
   return (
     <div className="w-full min-w-0 overflow-x-clip pt-52">
       {isAddDebtorOpen && (
         <AddDebtor onClose={() => setIsAddDebtorOpen(false)} />
       )}
-      <div className="fixed top-0 right-0 left-0 z-50 bg-surface-default ">
+      <div className="fixed top-0 right-0 left-0 z-50 bg-surface-default">
         <div className="py-space-component-padding-md">
           <TopNavigation
             buttonLabel="add Debtor"
@@ -49,7 +52,7 @@ function HomePage() {
                       Unpaid Debts
                     </span>
                     <span className="text-paragraph-lg-bold text-text-on-action">
-                      25
+                      {activeTabsCount}
                     </span>
                   </div>
                 </div>
